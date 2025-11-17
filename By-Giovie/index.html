@@ -261,6 +261,10 @@
         if (event.target === switcherOverlay) closeSwitcher();
       });
     });
+
+    document.addEventListener("DOMContentLoaded", () => {
+    document.querySelector("input[type='search']").focus();
+  });
   </script>
 </body>
 </html>

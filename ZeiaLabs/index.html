@@ -115,49 +115,65 @@
       0%, 100% { box-shadow: 0 0 20px var(--glow-color); }
       50% { box-shadow: 0 0 35px var(--glow-color); }
     }
+        
+    /* ESTILOS PARA PANTALLAS GRANDES (ESCRITORIO) */
+    @media (min-width: 901px) {
+      .shortcuts-nav li:first-child a {
+        position: relative; /* Crea el marco de referencia para el texto */
+        justify-content: center; /* Centra el logo horizontalmente */
+        height: 20px;      /* Aumentamos la altura para dar espacio */
+      }
+
+      /* Estilo y tamaño del ICONO de Zeia */
+      .shortcuts-nav li:first-child .nav-icon {
+        width: 60px;            /* <--- TAMAÑO del logo (ancho) */
+        height: 60px;           /* <--- TAMAÑO del logo (alto) */
+        object-fit: cover;      /* Evita que se deforme */
+        border-radius: 50%;   /* Lo hace un círculo perfecto */
+        transform: translateX(-80px);
+      }
+
+      /* Estilo y posición del TEXTO de Zeia (Centrado) */
+      .shortcuts-nav li:first-child .nav-text {
+        display: block !important; /* Aseguramos que el texto sea visible en escritorio */
+        position: absolute;
+        left: 60px;
+        text-align: center;
+        bottom: 10px;
+        font-size: 1rem;       
+        font-weight: 600;
+        color: var(--secondary-text); /* Corregido: Usar variable de color */
+        text-shadow: 0 0 5px #000;
+        pointer-events: none;
+      }
+    }
+    
+    /* ESTILOS PARA PANTALLAS PEQUEÑAS (MÓVIL) */
     @media (max-width: 900px) {
       .layout { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
       .sidebar {
-        width: 100%; height: auto;
+        width: 100%; height: 100%;
         flex-direction: row; justify-content: space-between;
         border-right: none; border-bottom: 1px solid var(--panel-border);
         padding: 1rem; animation: none;
       }
       .logo-container { display: flex; align-items: center; gap: 1rem; }
-      #logo-img { width: 40px; height: 40px; }
+      #logo-img { width: 40px; height: 40px; } /* Reducido para móvil */
       #logo-text { margin: 0; font-size: 1.2rem; }
-      .shortcuts-nav { display: flex; }
-      .shortcuts-nav a { padding: 0.5rem; }
-      .shortcuts-nav .nav-text { display: none; }
-    }
-      .shortcuts-nav li:first-child a {
-        position: relative; /* Crea el marco de referencia para el texto */
-        justify-content: center; /* Centra el logo horizontalmente */
-        height: 20px;      /* Aumentamos la altura para dar espacio */
-    }
-
-      /* 2. Estilo y tamaño del ICONO de Zeia */
+      .shortcuts-nav { display: flex; gap: 0.5rem; }
+      .shortcuts-nav a { padding: 0.5rem; margin-bottom: 0; }
+      
+      /* En móvil, el texto de TODOS los accesos directos se oculta */
+      .shortcuts-nav .nav-text { display: none;}
+      
+      /* En móvil, el logo de Zeia se comporta como un ícono normal */
       .shortcuts-nav li:first-child .nav-icon {
-        width: 60px;            /* <--- TAMAÑO del logo (ancho) */
-        height: 60px;           /* <--- TAMAÑO del logo (alto) */
-        object-fit: cover;      /* Evita que se deforme */
-        border-radius: 50%;     /* Lo hace un círculo perfecto */
-        transform: translateX(-80px);
+        width:  20px ; /* Opcional: para que se parezca más a los otros íconos */
+        height: 20px ;
+        border-radius: 50%;
+        transform: scale(3);
+      }
     }
-
-      /* 3. Estilo y posición del TEXTO de Zeia (Centrado) */
-      .shortcuts-nav li:first-child .nav-text {
-        position: absolute;  /* Flota sobre el logo, dentro del marco de referencia */
-        left: 60px;             /* ---> [CLAVE] Lo anclamos al borde izquierdo */
-        text-align: center;  /* ---> [CLAVE] Centramos el texto dentro de ese ancho */
-        bottom: 10px;        /* Distancia desde abajo (más alto = sube, más bajo = baja) */
-        font-size: 1rem;       
-        font-weight: 600;
-        color: secondary;
-        text-shadow: 0 0 5px #000;
-        pointer-events: none;
-    }
-
   </style>
 </head>
 <body>
@@ -166,7 +182,7 @@
       <aside class="sidebar">
         <div class="logo-container">
           <img id="logo-img" src="logo.png" alt="Zeia Labs Logo">
-          <h1 id="logo-text">Zeia Labs</h1>
+          <h1 id="logo-text">Zeia Lab</h1>
         </div>
         
         <!--ACCESOS DIRECTOS -->
@@ -185,7 +201,7 @@
         </header>
         
         <section class="search-container fade-in" style="animation-delay: 0.4s;">
-          <input type="search" placeholder="¿Qué necesitas hoy?" onkeydown="if(event.key==='Enter' && this.value.trim()){window.location.href='https://www.google.com/search?q='+encodeURIComponent(this.value);}">
+          <input type="search" autofocus placeholder="¿Qué necesitas hoy?" onkeydown="if(event.key==='Enter' && this.value.trim()){window.location.href='https://www.google.com/search?q='+encodeURIComponent(this.value);}">
         </section>
       </main>
     </div>

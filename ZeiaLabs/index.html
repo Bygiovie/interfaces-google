@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>Zeia Labs</title>
+  <title>Zeia Lab</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -141,16 +141,15 @@
         width: 60px;            /* <--- TAMAÑO del logo (ancho) */
         height: 60px;           /* <--- TAMAÑO del logo (alto) */
         object-fit: cover;      /* Evita que se deforme */
-        border-radius: 50%;   /* Lo hace un círculo perfecto */
+        border-radius: 50%;     /* Lo hace un círculo perfecto */
         transform: translateX(-80px);
     }
 
       /* 3. Estilo y posición del TEXTO de Zeia (Centrado) */
       .shortcuts-nav li:first-child .nav-text {
-        position: absolute;  /* Flota sobre el logo, dentro del marco de referencia */                   /* ---> [CLAVE] Le decimos que ocupe todo el ancho */
+        position: absolute;  /* Flota sobre el logo, dentro del marco de referencia */
         left: 60px;             /* ---> [CLAVE] Lo anclamos al borde izquierdo */
         text-align: center;  /* ---> [CLAVE] Centramos el texto dentro de ese ancho */
-        /* ---> Ajusta solo este valor para mover el texto ARRIBA y ABAJO <--- */
         bottom: 10px;        /* Distancia desde abajo (más alto = sube, más bajo = baja) */
         font-size: 1rem;       
         font-weight: 600;

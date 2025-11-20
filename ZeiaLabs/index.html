@@ -4,226 +4,314 @@
   <meta charset="utf-8">
   <title>Zeia Lab</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <style>
     :root {
-      --sidebar-width: 280px;
-      --bg-color: #0A0A10;
-      --primary-text: #EAECEF;
-      --secondary-text: #8A93A2;
-      --accent-color: #00BFFF; /* Deep Sky Blue */
-      --glow-color: rgba(0, 191, 255, 0.6);
-      --panel-bg: rgba(16, 22, 38, 0.7);
-      --panel-border: rgba(0, 191, 255, 0.2);
-    }
-    html, body {
-      margin: 0; padding: 0; height: 100%;
-      font-family: 'Inter', sans-serif;
-      overflow: hidden; color: var(--primary-text);
-      background-color: var(--bg-color);
-    }
-    .container {
-      width: 100%; height: 100%;
-      background: url('background.jpg') no-repeat center center;
-      background-size: cover; position: relative;
-    }
-    .container::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      background-image: 
-        linear-gradient(rgba(0, 191, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 191, 255, 0.05) 1px, transparent 1px);
-      background-size: 50px 50px; opacity: 0.5; z-index: 1;
-    }
-    .layout {
-      display: grid; grid-template-columns: var(--sidebar-width) 1fr;
-      height: 100vh; position: relative; z-index: 2;
-    }
-    .sidebar {
-      background: rgba(10, 10, 20, 0.5); backdrop-filter: blur(15px);
-      border-right: 1px solid var(--panel-border);
-      padding: 2rem; box-sizing: border-box;
-      display: flex; flex-direction: column; align-items: center; gap: 3rem;
-      animation: slideIn 0.8s ease-out forwards;
-    }
-    .logo-container { text-align: center; }
-    #logo-img {
-      width: 80px; height: 80px;
-      border-radius: 50%;
-      border: 2px solid var(--accent-color);
-      box-shadow: 0 0 20px var(--glow-color);
-      padding: 0;
-      object-fit: cover;
-      animation: pulse-glow 3s infinite ease-in-out;
-    }
-    #logo-text { font-size: 1.5rem; font-weight: 600; margin-top: 1rem; }
-    .shortcuts-nav { width: 100%; list-style: none; padding: 0; margin: 0; }
-    .shortcuts-nav a {
-      display: flex; align-items: center; gap: 1rem;
-      padding: 1rem; margin-bottom: 0.5rem;
-      border-radius: 0.5rem; text-decoration: none;
-      color: var(--secondary-text); font-weight: 400;
-      transition: all 0.2s ease;
-    }
-    .shortcuts-nav a:hover {
-      background: var(--panel-bg); color: var(--primary-text);
-      transform: translateX(5px);
-    }
-    /* Clase unificada para todos los íconos */
-    .nav-icon { 
-      width: 24px; height: 24px; 
-    }
-    .main-content {
-      display: flex; flex-direction: column;
-      justify-content: center; align-items: center;
-      padding: 3rem; gap: 2.5rem;
-    }
-    .main-header { text-align: center; }
-    #greeting { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 300; }
-    #clock {
-      font-size: clamp(4rem, 12vw, 8rem); font-weight: 600;
-      line-height: 1; color: transparent;
-      -webkit-text-stroke: 2px var(--primary-text);
-      background-image: url('background.jpg');
-      background-size: cover; background-clip: text;
-      -webkit-background-clip: text;
-    }
-    .search-container {
-      width: 100%; max-width: 600px;
-      background: var(--panel-bg); backdrop-filter: blur(10px);
-      border: 1px solid var(--panel-border); border-radius: 50px;
-      transition: all 0.3s ease;
-    }
-    .search-container:hover, .search-container:focus-within {
-      box-shadow: 0 0 25px var(--glow-color);
-      border-color: var(--accent-color);
-    }
-    input[type="search"] {
-      width: 100%; padding: 1rem 1.5rem;
-      font-size: 1rem; font-family: 'Inter', sans-serif;
-      border: none; outline: none; color: var(--primary-text);
-      background: transparent; box-sizing: border-box;
-    }
-    .fade-in {
-      opacity: 0; transform: translateY(20px);
-      animation: fadeIn 0.8s ease-out forwards;
-    }
-    @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
-    @keyframes slideIn { from { transform: translateX(-100%); } to { transform: translateX(0); } }
-    @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 0 20px var(--glow-color); }
-      50% { box-shadow: 0 0 35px var(--glow-color); }
-    }
-        
-    /* ESTILOS PARA PANTALLAS GRANDES (ESCRITORIO) */
-    @media (min-width: 901px) {
-      .shortcuts-nav li:first-child a {
-        position: relative; /* Crea el marco de referencia para el texto */
-        justify-content: center; /* Centra el logo horizontalmente */
-        height: 20px;      /* Aumentamos la altura para dar espacio */
-      }
+  --sidebar-width: 280px;
+  --bg-color: #0A0A10;
+  --bg-black: #000000;
+  --primary-text: #EAECEF;
+  --secondary-text: #8A93A2;
+  --accent-color: #00BFFF;
+  --glow-color: rgb(0, 191, 255);
+  --panel-bg: rgba(16, 22, 38, 0.7);
+  --panel-border: rgba(0, 191, 255, 0.2);
+}
 
-      /* Estilo y tamaño del ICONO de Zeia */
-      .shortcuts-nav li:first-child .nav-icon {
-        width: 60px;            /* <--- TAMAÑO del logo (ancho) */
-        height: 60px;           /* <--- TAMAÑO del logo (alto) */
-        object-fit: cover;      /* Evita que se deforme */
-        border-radius: 50%;   /* Lo hace un círculo perfecto */
-        transform: translateX(-80px);
-      }
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+  background-color: var(--bg-color);
+  color: var(--primary-text);
+}
 
-      /* Estilo y posición del TEXTO de Zeia (Centrado) */
-      .shortcuts-nav li:first-child .nav-text {
-        display: block !important; /* Aseguramos que el texto sea visible en escritorio */
-        position: absolute;
-        left: 60px;
-        text-align: center;
-        bottom: 10px;
-        font-size: 1rem;       
-        font-weight: 600;
-        color: var(--secondary-text); /* Corregido: Usar variable de color */
-        text-shadow: 0 0 5px #000;
-        pointer-events: none;
-      }
-    }
-    
-    /* ESTILOS PARA PANTALLAS PEQUEÑAS (MÓVIL) */
-    @media (max-width: 900px) {
-      .layout { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
-      .sidebar {
-        width: 100%; height: 100%;
-        flex-direction: row; justify-content: space-between;
-        border-right: none; border-bottom: 1px solid var(--panel-border);
-        padding: 1rem; animation: none;
-      }
-      .logo-container { display: flex; align-items: center; gap: 1rem; }
-      #logo-img { width: 40px; height: 40px; } /* Reducido para móvil */
-      #logo-text { margin: 0; font-size: 1.2rem; }
-      .shortcuts-nav { display: flex; gap: 0.5rem; }
-      .shortcuts-nav a { padding: 0.5rem; margin-bottom: 0; }
-      
-      /* En móvil, el texto de TODOS los accesos directos se oculta */
-      .shortcuts-nav .nav-text { display: none;}
-      
-      /* En móvil, el logo de Zeia se comporta como un ícono normal */
-      .shortcuts-nav li:first-child .nav-icon {
-        width:  20px ; /* Opcional: para que se parezca más a los otros íconos */
-        height: 20px ;
-        border-radius: 50%;
-        transform: scale(3);
-      }
-    }
+/* LAYOUT GENERAL */
+.layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-width) 1fr;
+  height: 100vh;
+  position: relative;
+}
+
+/* ------------------------------- */
+/*           SIDEBAR              */
+/* ------------------------------- */
+
+.sidebar {
+  background: rgba(10, 10, 20, 0.5);
+  backdrop-filter: blur(15px);
+  border-right: 1px solid var(--panel-border);
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;   /* LOGO arriba — ACCESOS abajo */
+  align-items: center;
+  gap: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* LOGO */
+.logo-container {
+  text-align: center;
+}
+
+#logo-img {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  border: 2px solid var(--accent-color);
+  box-shadow: 0px 0px 20px var(--glow-color);
+  object-fit: cover;
+  animation: pulse-glow 3s infinite ease-in-out;
+}
+
+#logo-text {
+  margin-top: .5rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+/* LOGIN */
+.login-btn {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .9rem;
+  padding: .5rem .8rem;
+  border-radius: 8px;
+  color: var(--secondary-text);
+  text-decoration: none;
+  transition: .2s;
+  position:fixed;
+  margin-top: 8rem;
+}
+
+.login-btn:hover {
+  color: var(--accent-color);
+}
+
+/* ------------------------------- */
+/*        ACCESOS DIRECTOS        */
+/* ------------------------------- */
+/* ---------- REEMPLAZAR: ACCESOS DIRECTOS ---------- */
+.shortcuts-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;                 /* espacio uniforme */
+  align-items: center;        /* centro el bloque (las cajas luego tienen ancho fijo) */
+  box-sizing: border-box;
+  margin-top: auto;
+  gap: 0.2rem;
+}
+
+/* todas las cajas tendrán el mismo ancho y comportamiento */
+.shortcuts-nav a {
+  width: 150px;               /* ancho fijo: todas las cajas IGUALES */
+  margin: 0;
+  padding: .8rem;             /* mismo padding para todas */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;/* icono + texto a la izquierda dentro de la caja */
+  gap: 0.5rem;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--secondary-text);
+  transition: transform .18s ease, background .18s ease, color .18s ease;
+  transform: none;            /* asegura que no haya transform inicial por animaciones */
+  box-sizing: border-box;
+}
+
+/* hover igual para todas */
+.shortcuts-nav a:hover {
+  background: var(--panel-bg);
+  color: var(--primary-text);
+  transform: translateX(5px);
+}
+
+/* ICONOS (SVG e IMG normales) */
+.shortcuts-nav a img,
+.shortcuts-nav a svg {
+  display: block;     /* evita baseline spacing / gaps */
+  flex: 0 0 auto;     /* no se estiran */
+}
+.nav-accesos {
+  display: flex;
+  flex-direction: column;   /* Se apilan en columna */
+  gap: 1rem;                /* Espacio entre ellos */
+}
+/* iconos pequeños */
+.nav-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+/* --------------------------------- */
+/*            ZEIA LAB               */
+/* --------------------------------- */
+.nav-icon-acces {
+  width: 1.4rem;        /* más grande pero no rompe la caja */
+  height: 1.4rem;
+  border-radius: 8px;
+  object-fit: cover;
+  display: block;
+  flex: 0 0 3rem;     /* reserva exactamente ese espacio en el flexbox */
+  margin: 0;          /* elimina márgenes inesperados */
+  padding-right: 0.1rem;
+  transform: scale(2.2);
+}
+
+/* texto del primer item igual que los demás */
+.nav-text-acces {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+  padding-right: 1rem;
+}
+
+
+/* ------------------------------- */
+/*        CONTENIDO PRINCIPAL      */
+/* ------------------------------- */
+
+.main-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;   /* Centra el contenido */
+  background: url('Zeia Lab logo_Mesa de trabajo 1.png') no-repeat center;
+  background-size: 100%  110%;  /* Mantiene proporción en TODAS las pantallas */
+  background-position: center center;
+}
+
+/* Saludo + Hora */
+.main-header {    
+  position: absolute;
+  top: 1rem;
+  right: 2rem;
+  text-align: right;
+}
+
+#greeting {
+  font-size: 2rem;
+  font-weight: 500;
+  color: var(--bg-color);
+}
+
+.fade-in { transform: none !important; }
+
+/* ------------------------------- */
+/*       BARRA DE BÚSQUEDA         */
+/* ------------------------------- */
+
+.search-container {
+  position: absolute;
+  bottom: 2rem;                 /* SIEMPRE ABAJO EN TODAS LAS PANTALLAS */
+  width: 100%;
+  max-width: 620px;
+  background: var(--panel-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--panel-border);
+  border-radius: 50px;
+  padding: .3rem 1rem;
+  transition: box-shadow .3s ease, border-color .3s ease;
+}
+
+.search-container:hover,
+.search-container:focus-within {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 25px var(--glow-color);
+}
+
+input[type="search"] {
+  width: 100%;
+  padding: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+  color: var(--accent-color);
+}
+
+#search-input::placeholder {
+  color: var(--accent-color);
+  font-weight: 500;
+  opacity: 1;
+
+}
   </style>
 </head>
+
 <body>
-  <div class="container">
-    <div class="layout">
-      <aside class="sidebar">
-        <div class="logo-container">
-          <img id="logo-img" src="logo.png" alt="Zeia Labs Logo">
-          <h1 id="logo-text">Zeia Lab</h1>
-        </div>
-        
-        <!--ACCESOS DIRECTOS -->
-        <ul class="shortcuts-nav">
-          <li><a href="https://www.zeialab.cl/" title="Zeia Lab"  class="fade-in" style="animation-delay: 0.6s;"><img src="logo.png" calt="Zeia Lab Icon" class="nav-icon"><span class="nav-text">Zeia Labs</span></a></li>
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <!-- LOGO -->
+      <div class="logo-container">
+        <img id="logo-img" src="logo.png" alt="Logo Zeia Lab">
+        <div id="logo-text">Zeia Lab</div>
+      </div>
+
+      <!-- LOGIN -->
+      <a class="login-btn" href="https://www.zeialab.cl/acceso" target="_self"><i class="fa-solid fa-user"></i> Login</a>
+
+      <!-- ACCESOS DIRECTOS -->
+      <ul class="shortcuts-nav" >
+          <li><a href="https://www.zeialab.cl/" title="Zeia Lab" class="fade-in" style="animation-delay: 0.6s;"><img src="logo.png" alt="Zeia Lab Icon" class="nav-icon-acces"><span class="nav-text-acces">Zeia Lab</span></a></li>
           <li><a href="https://mail.google.com" title="Gmail"  class="fade-in" style="animation-delay: 0.7s;"><svg viewBox="0 0 24 24" class="nav-icon"><path fill="#EA4335" d="M12 13.5l-10.5-6.75v10.5c0 .825.675 1.5 1.5 1.5h18c.825 0 1.5-.675 1.5-1.5v-10.5l-10.5 6.75z"/><path fill="#FBBC04" d="M12 13.5l-10.5-6.75 10.5 5.25 10.5-5.25-10.5 6.75z"/><path fill="#34A853" d="M22.5 6.75v-.75c0-.825-.675-1.5-1.5-1.5h-18c-.825 0-1.5.675-1.5 1.5v.75l10.5 5.25 10.5-5.25z"/><path fill="#4285F4" d="M1.5 6.75l10.5 5.25-10.5 6.75v-12zM12 12l10.5 6.75v-12l-10.5 5.25z"/></svg><span class="nav-text">Gmail</span></a></li>
           <li><a href="https://www.instagram.com" title="Instagram"  class="fade-in" style="animation-delay: 0.8s;"><svg viewBox="0 0 32 32" class="nav-icon"><defs><radialGradient id="ig-grad" cx="0.3" cy="1" r="1"><stop offset="0" stop-color="#FFD600"/><stop offset="0.5" stop-color="#FF0000"/><stop offset="1" stop-color="#D62976"/></radialGradient></defs><path fill="url(#ig-grad)" d="M16,0C7.164,0,0,7.164,0,16s7.164,16,16,16s16-7.164,16-16S24.836,0,16,0z M24,16c0,4.411-3.589,8-8,8s-8-3.589-8-8s3.589-8,8-8S24,11.589,24,16z M26,8c0,1.105-0.895,2-2,2s-2-0.895-2-2s0.895-2,2-2S26,6.895,26,8z M16,10c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6S19.309,10,16,10z"/></svg><span class="nav-text">Instagram</span></a></li>
           <li><a href="https://github.com/Bygiovie" title="GitHub"  class="fade-in" style="animation-delay: 0.9s;"><svg fill="#FFFFFF" viewBox="0 0 24 24" class="nav-icon"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.91 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg><span class="nav-text">GitHub</span></a></li>
+          <li><a href="https://www.youtube.com" title="YouTube" class="fade-in" style="animation-delay: 1s;"><svg viewBox="0 0 24 24" class="nav-icon"><path fill="red" d="M23.5 6.2c-.3-1.2-1.2-2.1-2.3-2.4C19 3.3 12 3.3 12 3.3s-7 0-9.2.5C1.6 4.1.7 5 .4 6.2 0 8.5 0 12 0 12s0 3.5.4 5.8c.3 1.2 1.2 2.1 2.3 2.4 2.2.5 9.2.5 9.2.5s7 0 9.2-.5c1.1-.3 2-1.2 2.3-2.4.4-2.3.4-5.8.4-5.8s0-3.5-.3-5.8zM9.7 15.5V8.5l6.2 3.5-6.2 3.5z"/></svg><span class="nav-text">YouTube</span></a></li>
+
         </ul>
-        
-      </aside>
-      <main class="main-content">
-        <header class="main-header fade-in" style="animation-delay: 0.2s;">
-          <h2 id="greeting">Cargando...</h2>
-          <h1 id="clock">00:00</h1>
-        </header>
-        
-        <section class="search-container fade-in" style="animation-delay: 0.4s;">
-          <input type="search" autofocus placeholder="¿Qué necesitas hoy?" onkeydown="if(event.key==='Enter' && this.value.trim()){window.location.href='https://www.google.com/search?q='+encodeURIComponent(this.value);}">
-        </section>
-      </main>
-    </div>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+      </header>
+      <!-- BUSCADOR -->
+      <section class="search-container">
+        <input id="search-input" type="search" placeholder="Cargando..." 
+  autofocus onkeydown="if(event.key==='Enter'){window.location.href='https://www.google.com/search?q='+encodeURIComponent(this.value);}">
+
+      </section>
+
+    </main>
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      updateTimeAndGreeting();
-      setInterval(updateTimeAndGreeting, 1000);
-    });
+  document.addEventListener('DOMContentLoaded', () => {
+    updatePlaceholderGreeting();
+    setInterval(updatePlaceholderGreeting, 1000);
+  });
 
-    function updateTimeAndGreeting() {
-      const now = new Date();
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      document.getElementById('clock').textContent = `${hours}:${minutes}`;
-      
-      let greetingText = "Buenas Noches";
-      if (now.getHours() >= 5 && now.getHours() < 12) greetingText = "Buenos Días";
-      else if (now.getHours() >= 12 && now.getHours() < 20) greetingText = "Buenas Tardes";
-      document.getElementById('greeting').textContent = greetingText;
-    }
+  function updatePlaceholderGreeting() {
+    const now = new Date();
+    let greeting = "Buenas Noches";
+
+    if (now.getHours() >= 5 && now.getHours() < 12) greeting = "Buenos Días";
+    else if (now.getHours() >= 12 && now.getHours() < 20) greeting = "Buenas Tardes";
+
+    // Cambiar el placeholder del input
+    const search = document.getElementById("search-input");
+    search.placeholder = `${greeting}, ¿qué necesitas hoy?`;
+  }
   </script>
 </body>
 </html>
+

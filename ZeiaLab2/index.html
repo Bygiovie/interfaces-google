@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Zeia Lab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    :root {
+      --sidebar-width: 280px;
+      --bg-color: #0A0A10;
+      --bg-black: #000000;
+      --primary-text: #EAECEF;
+      --secondary-text: #8A93A2;
+      --accent-color: #00BFFF;
+      --glow-color: rgb(0, 191, 255);
+      --panel-bg: rgba(16, 22, 38, 0.7);
+      --panel-border: rgba(0, 191, 255, 0.2);
+    }
+
+    html, body {
+      margin: 0;
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+      background-color: var(--bg-color);
+      color: var(--primary-text);
+    }
+
+    /* LAYOUT */
+    .layout {
+      display: grid;
+      grid-template-columns: var(--sidebar-width) 1fr;
+      height: 100vh;
+      position: relative;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      background: rgba(10, 10, 20, 0.5);
+      backdrop-filter: blur(15px);
+      border-right: 1px solid var(--panel-border);
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* LOGO */
+    .logo-container {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    #logo-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 2px solid var(--accent-color);
+      box-shadow: 0px 0px 20px var(--glow-color);
+      object-fit: cover;
+      animation: pulse-glow 3s infinite ease-in-out;
+    }
+
+    #logo-text {
+      margin-top: 1rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--primary-text);
+    }
+
+    /* BOTÓN LOGIN */
+    .login-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: .5rem .8rem;
+      border-radius: 8px;
+      color: var(--secondary-text);
+      text-decoration: none;
+      transition: .2s;
+    }
+
+    .login-btn:hover {
+      color: var(--accent-color);
+    }
+
+    /* ACCESOS DIRECTOS */
+    .shortcuts-nav {
+      list-style: none;
+      padding: 0;
+      margin-top: 9.375rem;
+      width: 100%;
+    }
+
+    .shortcuts-nav li {
+      margin-bottom: 1px;
+    }
+
+    .shortcuts-nav a {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem .8rem;
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--secondary-text);
+      transition: .3s ease;
+    }
+
+    .shortcuts-nav a:hover {
+      background: var(--panel-bg);
+      color: var(--primary-text);
+      transform: translateX(6px);
+    }
+
+    .nav-icon {
+      width: 25px;
+      height: 25px;
+    }
+
+    /* ACCESO DIRECTO ESPECIAL (Zeia Lab) */
+    .shortcuts-nav li:first-child .nav-icon-acces {
+      width: 28px !important;
+      height: 28px !important;
+      border-radius: 10px;
+      object-fit: cover;
+      margin-left: -3px;
+      scale: 2.5;
+    }
+    .shortcuts-nav li:first-child .nav-text-acces {
+      font-size: 1.1rem;
+      font-weight: 500;
+      position: relative;
+      top: 3px;
+      margin-left: -4px ;
+    }
+
+    /* MAIN CONTENT */
+    .main-content {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: url('Zeia Lab logo_Mesa de trabajo 1.png') no-repeat center center;
+      background-size: cover;
+    }
+
+    /* SALUDO + HORA */
+    .main-header {
+      position: absolute;
+      top: -5px;
+      right: 1.5rem;
+      text-align: center;
+    }
+
+    #greeting {
+      font-size: 2rem;
+      font-weight: 500;
+      color: var(--bg-color);
+    
+    }
+
+
+    #clock {
+      font-size: 2rem;
+      font-weight: 500;
+      color: #000;
+    }
+
+    /* BARRA DE BÚSQUEDA */
+    .search-container {
+      width: 100%;
+      max-width: 620px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--panel-border);
+      border-radius: 50px;
+      margin-top: 35.3rem;
+      padding: 0,1rem 1rem;
+      transition: box-shadow 0.3s ease; border-color: 0.3s ease;
+    }
+
+    .search-container:hover,
+    .search-container:focus-within {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 25px var(--glow-color);
+    }
+
+    input[type="search"] {
+      width: 100%;
+      padding: 1rem;
+      background: transparent;
+      border: none;
+      font-size: 1rem;
+      outline: none;
+      color: var(--primary-text);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <!-- LOGO -->
+      <div class="logo-container">
+        <img id="logo-img" src="logo.png" alt="Logo Zeia Lab">
+        <div id="logo-text">Zeia Lab</div>
+      </div>
+
+      <!-- LOGIN -->
+      <a class="login-btn" href="https://www.zeialab.cl/acceso" target="_self"><i class="fa-solid fa-user"></i> Login</a>
+
+      <!-- ACCESOS DIRECTOS -->
+        <ul class="shortcuts-nav">
+          <li><a href="https://www.zeialab.cl/" title="Zeia Lab"  class="fade-in" style="animation-delay: 0.6s;"><img src="logo.png" calt="Zeia Lab Icon" class="nav-icon-acces"><span class="nav-text-acces">Zeia Lab</span></a></li>
+          <li><a href="https://mail.google.com" title="Gmail"  class="fade-in" style="animation-delay: 0.7s;"><svg viewBox="0 0 24 24" class="nav-icon"><path fill="#EA4335" d="M12 13.5l-10.5-6.75v10.5c0 .825.675 1.5 1.5 1.5h18c.825 0 1.5-.675 1.5-1.5v-10.5l-10.5 6.75z"/><path fill="#FBBC04" d="M12 13.5l-10.5-6.75 10.5 5.25 10.5-5.25-10.5 6.75z"/><path fill="#34A853" d="M22.5 6.75v-.75c0-.825-.675-1.5-1.5-1.5h-18c-.825 0-1.5.675-1.5 1.5v.75l10.5 5.25 10.5-5.25z"/><path fill="#4285F4" d="M1.5 6.75l10.5 5.25-10.5 6.75v-12zM12 12l10.5 6.75v-12l-10.5 5.25z"/></svg><span class="nav-text">Gmail</span></a></li>
+          <li><a href="https://www.instagram.com" title="Instagram"  class="fade-in" style="animation-delay: 0.8s;"><svg viewBox="0 0 32 32" class="nav-icon"><defs><radialGradient id="ig-grad" cx="0.3" cy="1" r="1"><stop offset="0" stop-color="#FFD600"/><stop offset="0.5" stop-color="#FF0000"/><stop offset="1" stop-color="#D62976"/></radialGradient></defs><path fill="url(#ig-grad)" d="M16,0C7.164,0,0,7.164,0,16s7.164,16,16,16s16-7.164,16-16S24.836,0,16,0z M24,16c0,4.411-3.589,8-8,8s-8-3.589-8-8s3.589-8,8-8S24,11.589,24,16z M26,8c0,1.105-0.895,2-2,2s-2-0.895-2-2s0.895-2,2-2S26,6.895,26,8z M16,10c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6S19.309,10,16,10z"/></svg><span class="nav-text">Instagram</span></a></li>
+          <li><a href="https://github.com/Bygiovie" title="GitHub"  class="fade-in" style="animation-delay: 0.9s;"><svg fill="#FFFFFF" viewBox="0 0 24 24" class="nav-icon"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.91 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg><span class="nav-text">GitHub</span></a></li>
+        </ul>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+
+      <!-- SALUDO + HORA -->
+      <header class="main-header">
+        <h2 id="greeting">Cargando...</h2>
+        <h1 id="clock">00:00</h1>
+      </header>
+
+      <!-- BUSCADOR -->
+      <section class="search-container">
+        <input type="search" placeholder="¿Qué necesitas hoy?"
+                autofocus onkeydown="if(event.key==='Enter'){window.location.href='https://www.google.com/search?q='+encodeURIComponent(this.value);}">
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      updateTimeAndGreeting();
+      setInterval(updateTimeAndGreeting, 1000);
+    });
+
+    function updateTimeAndGreeting() {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+
+      document.getElementById("clock").textContent = `${hours}:${minutes}`;
+
+      let txt = "Buenas Noches";
+      if (now.getHours() >= 5 && now.getHours() < 12) txt = "Buenos Días";
+      else if (now.getHours() >= 12 && now.getHours() < 20) txt = "Buenas Tardes";
+
+      document.getElementById("greeting").textContent = txt;
+    }
+  </script>
+</body>
+</html>

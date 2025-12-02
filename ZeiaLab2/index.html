@@ -2,313 +2,1048 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>Zeia Lab</title>
+  <title>Zeia Lab Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Laboratorio de ingeniería - Dashboard personalizado" />
+  <meta name="author" content="Zeia Lab" />
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oswald:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
     :root {
-  --sidebar-width: 280px;
-  --bg-color: #0A0A10;
-  --bg-black: #000000;
-  --primary-text: #EAECEF;
-  --secondary-text: #8A93A2;
-  --accent-color: #00BFFF;
-  --glow-color: rgb(0, 191, 255);
-  --panel-bg: rgba(16, 22, 38, 0.7);
-  --panel-border: rgba(0, 191, 255, 0.2);
-}
+      --sidebar-width: 280px;
+      --bg-color: #0A0A10;
+      --primary-text: #EAECEF;
+      --secondary-text: #8A93A2;
+      --accent-color: #00BFFF;
+      --glow-color: rgb(0, 191, 255);
+      --panel-bg: rgba(16, 22, 38, 0.7);
+      --panel-border: rgba(0, 191, 255, 0.2);
+      
+      /* Variables para la posición final de la animación */
+      --logo-target-x-center: 140px; 
+      --logo-target-y-center: 4.5rem; 
+      --translate-x-target: calc(var(--logo-target-x-center) - 50vw); 
+      --translate-y-target: calc(var(--logo-target-y-center) - 50vh); 
+    }
 
-html, body {
-  margin: 0;
-  height: 100%;
-  font-family: 'Inter', sans-serif;
-  overflow: hidden;
-  background-color: var(--bg-color);
-  color: var(--primary-text);
-}
+    /* Reset y Estilos Base */
+    html, body {
+      margin: 0;
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+      background-color: var(--bg-color);
+      color: var(--primary-text);
+      font-size: 16px;
+    }
 
-/* LAYOUT GENERAL */
-.layout {
-  display: grid;
-  grid-template-columns: var(--sidebar-width) 1fr;
-  height: 100vh;
-  position: relative;
-}
+    /* Estilos del SPLASH SCREEN */
+    #splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-color); 
+      z-index: 9999; 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.5s ease-out, visibility 0.5s ease-out; 
+    }
 
-/* ------------------------------- */
-/*           SIDEBAR              */
-/* ------------------------------- */
+    #splash-logo-img {
+      width: 5rem; /* Mismo tamaño final que el logo original */
+      height: 5rem;
+      object-fit: cover;
+      animation: intro-animation 3.5s forwards ease-in-out; 
+    }
 
-.sidebar {
-  background: rgba(10, 10, 20, 0.5);
-  backdrop-filter: blur(15px);
-  border-right: 1px solid var(--panel-border);
-  padding: 2rem 1rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;   /* LOGO arriba — ACCESOS abajo */
-  align-items: center;
-  gap: 3rem;
-}
+    /* Keyframes de la animación */
+    @keyframes intro-animation {
+      0% {
+        transform: scale(7.5); /* Comienza muy grande */
+        opacity: 1;
+      }
+      70% {
+        /* Encoger y moverse a la posición final */
+        transform: translate(var(--translate-x-target), var(--translate-y-target)) scale(1);
+        opacity: 1;
+      }
+      85% {
+        /* Pequeña pausa en la posición final */
+        transform: translate(var(--translate-x-target), var(--translate-y-target)) scale(1);
+        opacity: 1;
+      }
+      100% {
+        /* Desaparecer */
+        transform: translate(var(--translate-x-target), var(--translate-y-target)) scale(1);
+        opacity: 0;
+      }
+    }
+    
+    /* LAYOUT GENERAL */
+    .layout {
+      display: grid;
+      grid-template-columns: var(--sidebar-width) 1fr;
+      height: 100vh;
+      position: relative;
+    }
 
-/* LOGO */
-.logo-container {
-  text-align: center;
-}
+    /* SIDEBAR */
+    .sidebar {
+      background: rgba(10, 10, 20, 0.5);
+      backdrop-filter: blur(15px);
+      border-right: 1px solid var(--panel-border);
+      padding: 2rem 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 3rem;
+      position: relative;
+      z-index: 1;
+    }
 
-#logo-img {
-  width: 5rem;
-  height: 5rem;
-  border-radius: 50%;
-  border: 2px solid var(--accent-color);
-  box-shadow: 0px 0px 20px var(--glow-color);
-  object-fit: cover;
-  animation: pulse-glow 3s infinite ease-in-out;
-}
+    /* LOGO */
+    .logo-container {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
 
-#logo-text {
-  margin-top: .5rem;
-  font-size: 1.3rem;
-  font-weight: 600;
-}
+    #logo-img {
+      width: 5rem;
+      height: 5rem;
+      border-radius: 50%;
+      border: 2px solid var(--accent-color);
+      box-shadow: 0px 0px 20px var(--glow-color);
+      object-fit: cover;
+      animation: pulse-glow 3s infinite ease-in-out;
+    }
+    
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px var(--glow-color); }
+      50% { box-shadow: 0 0 30px var(--glow-color); }
+    }
 
-/* LOGIN */
-.login-btn {
-  display: flex;
-  align-items: center;
-  gap: .4rem;
-  font-size: .9rem;
-  padding: .5rem .8rem;
-  border-radius: 8px;
-  color: var(--secondary-text);
-  text-decoration: none;
-  transition: .2s;
-  position:fixed;
-  margin-top: 8rem;
-}
+    #logo-text {
+      margin-top: .5rem;
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
 
-.login-btn:hover {
-  color: var(--accent-color);
-}
+    /* LOGIN */
+    .login-btn {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .9rem;
+      padding: .5rem .8rem;
+      border-radius: 8px;
+      color: var(--secondary-text);
+      text-decoration: none;
+      transition: .2s;
+      position:fixed;
+      margin-top: 8rem;
+    }
 
-/* ------------------------------- */
-/*        ACCESOS DIRECTOS        */
-/* ------------------------------- */
-/* ---------- REEMPLAZAR: ACCESOS DIRECTOS ---------- */
-.shortcuts-nav {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: .2rem;                 /* espacio uniforme */
-  align-items: center;        /* centro el bloque (las cajas luego tienen ancho fijo) */
-  box-sizing: border-box;
-  margin-top: auto;
-  gap: 0.2rem;
-}
+    .login-btn:hover {
+      color: var(--accent-color);
+    }
 
-/* todas las cajas tendrán el mismo ancho y comportamiento */
-.shortcuts-nav a {
-  width: 150px;               /* ancho fijo: todas las cajas IGUALES */
-  margin: 0;
-  padding: .8rem;             /* mismo padding para todas */
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;/* icono + texto a la izquierda dentro de la caja */
-  gap: 0.5rem;
-  border-radius: 10px;
-  text-decoration: none;
-  color: var(--secondary-text);
-  transition: transform .18s ease, background .18s ease, color .18s ease;
-  transform: none;            /* asegura que no haya transform inicial por animaciones */
-  box-sizing: border-box;
-}
+    /* ACCESOS DIRECTOS */
+    .shortcuts-nav {
+      list-style: none;
+      padding: 0;
+      margin: auto 0 0 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: .2rem;
+      align-items: center;
+      box-sizing: border-box;
+    }
 
-/* hover igual para todas */
-.shortcuts-nav a:hover {
-  background: var(--panel-bg);
-  color: var(--primary-text);
-  transform: translateX(5px);
-}
+    .shortcuts-nav a {
+      width: 150px;
+      margin: 0;
+      padding: .8rem;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0.5rem;
+      border-radius: 10px;
+      text-decoration: none;
+      color: var(--secondary-text);
+      transition: transform .18s ease, background .18s ease, color .18s ease;
+      transform: none;
+      box-sizing: border-box;
+    }
 
-/* ICONOS (SVG e IMG normales) */
-.shortcuts-nav a img,
-.shortcuts-nav a svg {
-  display: block;     /* evita baseline spacing / gaps */
-  flex: 0 0 auto;     /* no se estiran */
-}
-.nav-accesos {
-  display: flex;
-  flex-direction: column;   /* Se apilan en columna */
-  gap: 1rem;                /* Espacio entre ellos */
-}
-/* iconos pequeños */
-.nav-icon {
-  width: 1.4rem;
-  height: 1.4rem;
-}
+    .shortcuts-nav a:hover {
+      background: var(--panel-bg);
+      color: var(--primary-text);
+      transform: translateX(5px);
+    }
 
-/* --------------------------------- */
-/*            ZEIA LAB               */
-/* --------------------------------- */
-.nav-icon-acces {
-  width: 1.4rem;        /* más grande pero no rompe la caja */
-  height: 1.4rem;
-  border-radius: 8px;
-  object-fit: cover;
-  display: block;
-  flex: 0 0 3rem;     /* reserva exactamente ese espacio en el flexbox */
-  margin: 0;          /* elimina márgenes inesperados */
-  padding-right: 0.1rem;
-  transform: scale(2.2);
-}
+    .nav-icon {
+      width: 1.4rem;
+      height: 1.4rem;
+      flex-shrink: 0;
+    }
 
-/* texto del primer item igual que los demás */
-.nav-text-acces {
-  font-size: 1rem;
-  font-weight: 500;
-  margin: 0;
-  padding-right: 1rem;
-}
+    .nav-icon-acces {
+      width: 1.4rem;
+      height: 1.4rem;
+      border-radius: 8px;
+      object-fit: cover;
+      display: block;
+      flex: 0 0 1.4rem; 
+      margin: 0;
+      transform: scale(2.4); 
+    }
 
+    .nav-text-acces, .nav-text {
+      font-size: 1rem;
+      font-weight: 400;
+      margin: 0;
+    }
 
-/* ------------------------------- */
-/*        CONTENIDO PRINCIPAL      */
-/* ------------------------------- */
+    /* CONTENIDO PRINCIPAL */
+    .main-content {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: url('Zeia Lab logo_Mesa de trabajo 1.png') no-repeat center;
+      background-size: 100% 110%; 
+      background-position: center center;
+      overflow: hidden;
+    }
+    
+    /* Barra de Búsqueda */
+    .search-container {
+      position: absolute;
+      bottom: 2rem;
+      width: 100%;
+      max-width: 620px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--panel-border);
+      border-radius: 50px;
+      padding: .3rem 1rem;
+      transition: box-shadow .3s ease, border-color .3s ease;
+      z-index: 40;
+    }
 
-.main-content {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;   /* Centra el contenido */
-  background: url('Zeia Lab logo_Mesa de trabajo 1.png') no-repeat center;
-  background-size: 100%  110%;  /* Mantiene proporción en TODAS las pantallas */
-  background-position: center center;
-}
+    .search-container:hover,
+    .search-container:focus-within {
+      border-color: var(--accent-color);
+      box-shadow: 0 0 25px var(--glow-color);
+    }
 
-/* Saludo + Hora */
-.main-header {    
-  position: absolute;
-  top: 1rem;
-  right: 2rem;
-  text-align: right;
-}
+    #search-input {
+      width: 100%;
+      padding: 1rem;
+      background: transparent;
+      border: none;
+      font-size: 1rem;
+      outline: none;
+      color: var(--accent-color);
+    }
 
-#greeting {
-  font-size: 2rem;
-  font-weight: 500;
-  color: var(--bg-color);
-}
+    #search-input::placeholder {
+      color: var(--accent-color);
+      font-weight: 500;
+      opacity: 1;
+    }
 
-.fade-in { transform: none !important; }
+    /* WIDGETS - CONTENEDOR DEL GRUPO (El que es arrastrable) */
+    #widget-group-container{
+      position: fixed;
+      top: 50px; 
+      right: 50px; /* Anclado a la derecha */
+      /* Propiedades para el grupo */
+      padding: 0; 
+      background: transparent; 
+      border: none; 
+      box-shadow: none;
+      cursor: grab;
+      z-index: 50;
+      /* CLAVE: Establecer el origen de la transformación en la esquina superior derecha */
+      transform-origin: top right; 
+      transition: opacity .3s, visibility .3s, transform .3s; 
+      /* Ajuste del tamaño para acomodar el nuevo calendario/clima */
+      width: 350px; 
+      height: 420px;
+    }
 
-/* ------------------------------- */
-/*       BARRA DE BÚSQUEDA         */
-/* ------------------------------- */
+    #widget-group-container:active{
+      cursor: grabbing;
+      z-index: 60;
+    }
 
-.search-container {
-  position: absolute;
-  bottom: 2rem;                 /* SIEMPRE ABAJO EN TODAS LAS PANTALLAS */
-  width: 100%;
-  max-width: 620px;
-  background: var(--panel-bg);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--panel-border);
-  border-radius: 50px;
-  padding: .3rem 1rem;
-  transition: box-shadow .3s ease, border-color .3s ease;
-}
+    /* WIDGETS INDIVIDUALES: Se superponen dentro del grupo. */
+    .draggable-widget{
+      position: absolute; 
+      top: 0;
+      left: 0;
+      /* Visibilidad/Opacidad para la rotación secuencial */
+      opacity: 0; 
+      pointer-events: none; 
+      transition: opacity 0.5s ease-in-out; 
+      
+      /* Mantener estilos de panel */
+      background:rgba(22, 27, 34, 0.7);
+      border-radius:12px;
+      cursor: default; /* El cursor de arrastre va en el padre */
+      margin: 15px; /* Margen para centrar visualmente dentro del contenedor de grupo */
+      box-sizing: border-box; /* Asegura que padding no afecte el tamaño total */
+    }
 
-.search-container:hover,
-.search-container:focus-within {
-  border-color: var(--accent-color);
-  box-shadow: 0 0 25px var(--glow-color);
-}
+    /* Clase para el widget visible */
+    .widget-active{
+      opacity: 1 !important; 
+      pointer-events: auto !important;
+    }
 
-input[type="search"] {
-  width: 100%;
-  padding: 1rem;
-  background: transparent;
-  border: none;
-  font-size: 1rem;
-  outline: none;
-  color: var(--accent-color);
-}
+    /* RELOJ DIGITAL 7 SEGMENTOS */
+    .clock-7seg-box{padding:1.5rem 1rem;display:flex;align-items:center;justify-content:center;gap:.8rem;min-width:300px}
+    .digit{width:45px;height:75px;position:relative;transform:skewX(-5deg)}
+    .segment{position:absolute;background:#1a1a1a00;border-radius:4px;opacity:.3;transition:.1s}
+    .segment.on{background:#fff;box-shadow:0 0 10px rgba(255,255,255,.8);opacity:1;z-index:2}
+    .seg-a,.seg-d,.seg-g{height:8px;left:8px;right:8px}
+    .seg-a{top:0}.seg-g{top:33px}.seg-d{bottom:0}
+    .seg-b,.seg-c,.seg-e,.seg-f{width:8px;height:28px}
+    .seg-f{top:5px;left:0}.seg-b{top:5px;right:0}.seg-e{bottom:5px;left:0}.seg-c{bottom:5px;right:0}
+    .colon{display:flex;flex-direction:column;justify-content:space-around;height:45px;width:12px;align-items:center;animation:blink 1s infinite}
+    .dot{width:8px;height:8px;background:#fff;border-radius:50%;box-shadow:0 0 8px #fff}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-#search-input::placeholder {
-  color: var(--accent-color);
-  font-weight: 500;
-  opacity: 1;
+    /* CLIMA WIDGET MEJORADO */
+    .weather-widget{
+      padding:1.5rem 2rem;
+      color:#fff;
+      display:flex;
+      flex-direction: column; 
+      align-items:center;
+      justify-content:center;
+      min-width:300px;
+      height: 380px; 
+    }
+    .weather-main-info{
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .weather-icon{
+      font-size:4rem; /* Icono más grande */
+      filter:drop-shadow(0 0 10px rgba(255, 255, 255, 0.6));
+      animation:float 3s infinite ease-in-out;
+    }
+    .temp{
+      font-size:4rem; /* Temperatura más grande */
+      font-weight:bold;
+      line-height:1;
+      margin-bottom:0;
+      text-shadow:0 0 10px rgba(255,255,255,.5);
+    }
+    .location-text{
+      font-size:1.1rem;
+      color:var(--secondary-text);
+      font-weight:600;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .weather-description{
+      font-size:1.5rem;
+      font-weight:300;
+      color:var(--primary-text);
+      text-transform: capitalize;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .weather-details{
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      border-top: 1px solid var(--panel-border);
+      padding-top: 1rem;
+      margin-top: auto; 
+    }
+    .detail-item{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+      font-size: 0.85rem;
+      color: var(--secondary-text);
+    }
+    .detail-item i {
+      font-size: 1.2rem;
+      color: var(--accent-color);
+    }
+    .detail-value{
+      font-weight: 600;
+      color: var(--primary-text);
+    }
 
-}
+    /* CALENDARIO WIDGET MEJORADO */
+    .calendar-widget{
+      display:flex;
+      flex-direction:column;
+      text-align:center;
+      width: 320px; /* Definir un ancho fijo */
+    }
+    .cal-header{
+      background:var(--accent-color);
+      color:#000;
+      font-family:'Oswald',sans-serif;
+      font-size:1.3rem; 
+      font-weight:bold;
+      text-transform:uppercase;
+      padding: .8rem 1rem; 
+      letter-spacing:.2rem; 
+      box-shadow:0 0 15px var(--secondary-text)
+    }
+    .cal-body{
+      padding: 1rem 1rem 1.5rem; /* Ajuste de padding */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .cal-month-year{
+      margin-bottom:1rem; 
+      font-size:1.1rem; 
+      color:var(--secondary-text);
+      text-transform:uppercase;
+      letter-spacing:.1rem
+    }
+    .cal-weekdays{
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent-color);
+      margin-bottom: 0.5rem;
+      width: 100%;
+    }
+    .cal-grid{
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.2rem;
+      width: 100%;
+    }
+    .cal-day{
+      padding: 0.4rem 0;
+      font-size: 0.9rem;
+      font-weight: 300;
+      color: var(--primary-text);
+      text-align: center;
+      cursor: default;
+      transition: background 0.2s;
+      border-radius: 4px;
+    }
+    .cal-day:not(.empty):hover{
+      background: rgba(0, 191, 255, 0.1);
+    }
+    .cal-day-active{
+      background: var(--accent-color);
+      color: var(--bg-color) !important;
+      font-weight: 600 !important;
+      box-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+    }
+    /* BOTÓN DE CONFIGURACIÓN */
+    #settings-btn{
+      position:fixed;
+      bottom:2.5rem;
+      right:2.5rem;
+      font-size: 1.5rem;
+      color:rgba(255,255,255,.5);
+      cursor:grab;
+      z-index:100;
+      transition:color .3s;
+      background:rgba(0,0,0,.5);
+      padding:.5rem;
+      border-radius:50%;
+      backdrop-filter:blur(5px);
+      box-shadow:0 0 10px rgba(0,0,0,.5);
+      transform: none; 
+    }
+
+    #settings-btn:hover{
+        color:var(--accent-color); 
+        box-shadow:0 0 10px var(--glow-color);
+    }
+
+    #settings-btn:active{
+        cursor:grabbing; 
+        transition: none;
+        transform: none !important; 
+        box-shadow:0 0 10px rgba(0,0,0,.5);
+    }
+
+    /* MODAL DE CONFIGURACIÓN */
+    .settings-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);backdrop-filter:blur(5px);display:flex;justify-content:center;align-items:center;z-index:1000;opacity:0;pointer-events:none;transition:.3s}
+    .settings-modal.active{opacity:1;pointer-events:auto}
+    .settings-content{background:var(--bg-color);width:90%;max-width:350px;padding:2rem;border-radius:15px;border:2px solid var(--panel-border);box-shadow:0 0 30px rgba(0,191,255,.2);color:#fff;transform:scale(.9);transition:.3s}
+    .settings-modal.active .settings-content{transform:scale(1)}
+    .settings-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;border-bottom:1px solid #333;padding-bottom:.8rem}
+    .settings-header h3{margin:0;font-size:1.3rem}
+    .close-modal{cursor:pointer;font-size:1.5rem;color:var(--secondary-text);transition:.2s}
+    .close-modal:hover{color:var(--accent-color)}
+    .setting-item{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem}
+    .switch{position:relative;display:inline-block;width:50px;height:26px}
+    .switch input{opacity:0;width:0;height:0}
+    .slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#333;transition:.4s;border-radius:34px}
+    .slider:before{position:absolute;content:"";height:18px;width:18px;left:4px;bottom:4px;background:#fff;transition:.4s;border-radius:50%}
+    input:checked+.slider{background:var(--accent-color)}
+    input:checked+.slider:before{transform:translateX(24px)}
+
   </style>
 </head>
 
 <body>
+  <div id="splash-screen">
+    <img id="splash-logo-img" src="logonegro.png" alt="Logo de Carga">
+  </div>
+
   <div class="layout">
 
-    <!-- SIDEBAR -->
     <aside class="sidebar">
 
-      <!-- LOGO -->
       <div class="logo-container">
         <img id="logo-img" src="logo.png" alt="Logo Zeia Lab">
         <div id="logo-text">Zeia Lab</div>
       </div>
 
-      <!-- LOGIN -->
       <a class="login-btn" href="https://www.zeialab.cl/acceso" target="_self"><i class="fa-solid fa-user"></i> Login</a>
 
-      <!-- ACCESOS DIRECTOS -->
-      <ul class="shortcuts-nav" >
-          <li><a href="https://www.zeialab.cl/" title="Zeia Lab" class="fade-in" style="animation-delay: 0.6s;"><img src="logo.png" alt="Zeia Lab Icon" class="nav-icon-acces"><span class="nav-text-acces">Zeia Lab</span></a></li>
-          <li><a href="https://mail.google.com" title="Gmail"  class="fade-in" style="animation-delay: 0.7s;"><svg viewBox="0 0 24 24" class="nav-icon"><path fill="#EA4335" d="M12 13.5l-10.5-6.75v10.5c0 .825.675 1.5 1.5 1.5h18c.825 0 1.5-.675 1.5-1.5v-10.5l-10.5 6.75z"/><path fill="#FBBC04" d="M12 13.5l-10.5-6.75 10.5 5.25 10.5-5.25-10.5 6.75z"/><path fill="#34A853" d="M22.5 6.75v-.75c0-.825-.675-1.5-1.5-1.5h-18c-.825 0-1.5.675-1.5 1.5v.75l10.5 5.25 10.5-5.25z"/><path fill="#4285F4" d="M1.5 6.75l10.5 5.25-10.5 6.75v-12zM12 12l10.5 6.75v-12l-10.5 5.25z"/></svg><span class="nav-text">Gmail</span></a></li>
-          <li><a href="https://www.instagram.com" title="Instagram"  class="fade-in" style="animation-delay: 0.8s;"><svg viewBox="0 0 32 32" class="nav-icon"><defs><radialGradient id="ig-grad" cx="0.3" cy="1" r="1"><stop offset="0" stop-color="#FFD600"/><stop offset="0.5" stop-color="#FF0000"/><stop offset="1" stop-color="#D62976"/></radialGradient></defs><path fill="url(#ig-grad)" d="M16,0C7.164,0,0,7.164,0,16s7.164,16,16,16s16-7.164,16-16S24.836,0,16,0z M24,16c0,4.411-3.589,8-8,8s-8-3.589-8-8s3.589-8,8-8S24,11.589,24,16z M26,8c0,1.105-0.895,2-2,2s-2-0.895-2-2s0.895-2,2-2S26,6.895,26,8z M16,10c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6S19.309,10,16,10z"/></svg><span class="nav-text">Instagram</span></a></li>
-          <li><a href="https://github.com/Bygiovie" title="GitHub"  class="fade-in" style="animation-delay: 0.9s;"><svg fill="#FFFFFF" viewBox="0 0 24 24" class="nav-icon"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.91 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg><span class="nav-text">GitHub</span></a></li>
-          <li><a href="https://www.youtube.com" title="YouTube" class="fade-in" style="animation-delay: 1s;"><svg viewBox="0 0 24 24" class="nav-icon"><path fill="red" d="M23.5 6.2c-.3-1.2-1.2-2.1-2.3-2.4C19 3.3 12 3.3 12 3.3s-7 0-9.2.5C1.6 4.1.7 5 .4 6.2 0 8.5 0 12 0 12s0 3.5.4 5.8c.3 1.2 1.2 2.1 2.3 2.4 2.2.5 9.2.5 9.2.5s7 0 9.2-.5c1.1-.3 2-1.2 2.3-2.4.4-2.3.4-5.8.4-5.8s0-3.5-.3-5.8zM9.7 15.5V8.5l6.2 3.5-6.2 3.5z"/></svg><span class="nav-text">YouTube</span></a></li>
-
-        </ul>
+      <ul class="shortcuts-nav">
+        <li><a href="https://www.zeialab.cl/" title="Zeia Lab"><img src="logo.png" alt="Zeia Lab Icon" class="nav-icon-acces"><span class="nav-text-acces">Zeia Lab</span></a></li>
+        <li><a href="https://mail.google.com" title="Gmail"><svg viewBox="0 0 24 24" class="nav-icon"><path fill="#EA4335" d="M12 13.5l-10.5-6.75v10.5c0 .825.675 1.5 1.5 1.5h18c.825 0 1.5-.675 1.5-1.5v-10.5l-10.5 6.75z"/><path fill="#FBBC04" d="M12 13.5l-10.5-6.75 10.5 5.25 10.5-5.25-10.5 6.75z"/><path fill="#34A853" d="M22.5 6.75v-.75c0-.825-.675-1.5-1.5-1.5h-18c-.825 0-1.5.675-1.5 1.5v.75l10.5 5.25 10.5-5.25z"/><path fill="#4285F4" d="M1.5 6.75l10.5 5.25-10.5 6.75v-12zM12 12l10.5 6.75v-12l-10.5 5.25z"/></svg><span class="nav-text">Gmail</span></a></li>
+        <li><a href="https://www.instagram.com" title="Instagram"><svg viewBox="0 0 32 32" class="nav-icon"><defs><radialGradient id="ig-grad" cx="0.3" cy="1" r="1"><stop offset="0" stop-color="#FFD600"/><stop offset="0.5" stop-color="#FF0000"/><stop offset="1" stop-color="#D62976"/></radialGradient></defs><path fill="url(#ig-grad)" d="M16,0C7.164,0,0,7.164,0,16s7.164,16,16,16s16-7.164,16-16S24.836,0,16,0z M24,16c0,4.411-3.589,8-8,8s-8-3.589-8-8s3.589-8,8-8S24,11.589,24,16z M26,8c0,1.105-0.895,2-2,2s-2-0.895-2-2s0.895-2,2-2S26,6.895,26,8z M16,10c-3.309,0-6,2.691-6,6s2.691,6,6,6s6-2.691,6-6S19.309,10,16,10z"/></svg><span class="nav-text">Instagram</span></a></li>
+        <li><a href="https://github.com/Bygiovie" title="GitHub"><svg fill="#FFFFFF" viewBox="0 0 24 24" class="nav-icon"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.91 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg><span class="nav-text">GitHub</span></a></li>
+        <li><a href="https://www.youtube.com" title="YouTube"><svg viewBox="0 0 24 24" class="nav-icon"><path fill="red" d="M23.5 6.2c-.3-1.2-1.2-2.1-2.3-2.4C19 3.3 12 3.3 12 3.3s-7 0-9.2.5C1.6 4.1.7 5 .4 6.2 0 8.5 0 12 0 12s0 3.5.4 5.8c.3 1.2 1.2 2.1 2.3 2.4 2.2.5 9.2.5 9.2.5s7 0 9.2-.5c1.1-.3 2-1.2 2.3-2.4.4-2.3.4-5.8.4-5.8s0-3.5-.3-5.8zM9.7 15.5V8.5l6.2 3.5-6.2 3.5z"/></svg><span class="nav-text">YouTube</span></a></li>
+        <li><a href="https://wa.me/" title="WhatsApp"><svg viewBox="0 0 24 24" class="nav-icon"><path fill="#25D366" d="M20.52 3.48A11.8 11.8 0 0 0 12 0C5.37 0 0 5.02 0 11.22c0 1.98.53 3.92 1.54 5.63L0 24l7.33-1.93a12.7 12.7 0 0 0 4.67.9h.01c6.63 0 12-5.02 12-11.22 0-2.99-1.24-5.8-3.49-7.79zM12 21.3c-1.45 0-2.88-.35-4.15-1.02l-.3-.16-4.35 1.14 1.16-4.02-.2-.31A9.4 9.4 0 0 1 2.2 11.2c0-5.12 4.4-9.3 9.8-9.3 2.62 0 5.08.98 6.93 2.78 1.85 1.8 2.87 4.2 2.87 6.72 0 5.14-4.4 9.31-9.8 9.31zm5.3-6.93c-.29-.15-1.7-.84-1.96-.94-.26-.1-.45-.15-.64.15-.19.29-.74.94-.91 1.13-.17.19-.34.22-.63.07-.29-.15-1.22-.44-2.32-1.41-.86-.75-1.44-1.68-1.61-1.96-.17-.29-.02-.45.13-.6.13-.13.29-.34.44-.51.15-.17.2-.29.29-.48.1-.19.05-.36-.02-.51-.07-.15-.64-1.54-.88-2.11-.23-.55-.47-.47-.64-.47-.17 0-.36-.02-.55-.02s-.51.07-.78.36c-.26.29-1.02 1-1.02 2.44 0 1.44 1.05 2.83 1.2 3.02.15.19 2.06 3.15 5.02 4.31.7.3 1.24.48 1.67.61.7.22 1.33.19 1.83.12.56-.08 1.7-.69 1.94-1.35.24-.66.24-1.22.17-1.35-.07-.14-.26-.22-.55-.36z"/></svg><span class="nav-text">WhatsApp</span></a></li>
+        
+      </ul>
     </aside>
 
-    <!-- CONTENIDO PRINCIPAL -->
     <main class="main-content">
-      </header>
-      <!-- BUSCADOR -->
-      <section class="search-container">
-        <input id="search-input" type="search" placeholder="Cargando..." 
-  autofocus onkeydown="if(event.key==='Enter'){window.location.href='https://www.google.com/search?q='+encodeURIComponent(this.value);}">
 
+      <div id="widget-group-container">
+        
+        <div class="draggable-widget clock-7seg-box" id="widget-clock">
+          <div class="digit" id="h1"><div class="segment seg-a"></div><div class="segment seg-b"></div><div class="segment seg-c"></div><div class="segment seg-d"></div><div class="segment seg-e"></div><div class="segment seg-f"></div><div class="segment seg-g"></div></div>
+          <div class="digit" id="h2"><div class="segment seg-a"></div><div class="segment seg-b"></div><div class="segment seg-c"></div><div class="segment seg-d"></div><div class="segment seg-e"></div><div class="segment seg-f"></div><div class="segment seg-g"></div></div>
+          <div class="colon"><div class="dot"></div><div class="dot"></div></div>
+          <div class="digit" id="m1"><div class="segment seg-a"></div><div class="segment seg-b"></div><div class="segment seg-c"></div><div class="segment seg-d"></div><div class="segment seg-e"></div><div class="segment seg-f"></div><div class="segment seg-g"></div></div>
+          <div class="digit" id="m2"><div class="segment seg-a"></div><div class="segment seg-b"></div><div class="segment seg-c"></div><div class="segment seg-d"></div><div class="segment seg-e"></div><div class="segment seg-f"></div><div class="segment seg-g"></div></div>
+        </div>
+        
+        <div class="draggable-widget weather-widget" id="widget-weather">
+          <div class="location-text" id="weather-location">Cargando ubicación...</div>
+          <div class="weather-main-info">
+            <i class="fa-solid fa-cloud weather-icon" id="weather-icon"></i>
+            <div class="temp" id="weather-temp">--°</div>
+          </div>
+          <div class="weather-description" id="weather-description">Cargando...</div>
+          <div class="weather-details">
+            <div class="detail-item">
+              <i class="fa-solid fa-wind"></i>
+              <span class="detail-value" id="weather-wind">-- km/h</span>
+              <span>Viento</span>
+            </div>
+            <div class="detail-item">
+              <i class="fa-solid fa-water"></i>
+              <span class="detail-value" id="weather-humidity">--%</span>
+              <span>Humedad</span>
+            </div>
+            <div class="detail-item">
+              <i class="fa-solid fa-temperature-arrow-up"></i>
+              <span class="detail-value" id="weather-high">--°</span>
+              <span>Máx</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="draggable-widget calendar-widget" id="widget-calendar">
+          <div class="cal-header" id="cal-day-name">--</div>
+          <div class="cal-body">
+            <div class="cal-month-year" id="cal-month-year">--</div>
+            <div class="cal-weekdays">
+              <span>D</span><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span>
+            </div>
+            <div class="cal-grid" id="cal-grid">
+              </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="settings-btn" title="Config"><i class="fa-solid fa-gear"></i></div>
+
+      <section class="search-container">
+        <input id="search-input" type="search" placeholder="Cargando..." autofocus onkeydown="if(event.key==='Enter'){window.location.href='https://www.google.com/search?q='+encodeURIComponent(this.value);}">
       </section>
 
     </main>
+
+    <div class="settings-modal" id="settings-modal">
+      <div class="settings-content">
+        <div class="settings-header"><h3>Widgets</h3><i class="fa-solid fa-xmark close-modal" id="close-settings"></i></div>
+        <div class="setting-item"><span>Reloj Digital</span><label class="switch"><input type="checkbox" id="toggle-clock" checked><span class="slider"></span></label></div>
+        <div class="setting-item"><span>Clima</span><label class="switch"><input type="checkbox" id="toggle-weather" checked><span class="slider"></span></label></div>
+        <div class="setting-item"><span>Calendario</span><label class="switch"><input type="checkbox" id="toggle-calendar" checked><span class="slider"></span></label></div>
+      </div>
+    </div>
   </div>
 
   <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    updatePlaceholderGreeting();
-    setInterval(updatePlaceholderGreeting, 1000);
-  });
+    // === ROTACIÓN Y VISIBILIDAD ===
 
-  function updatePlaceholderGreeting() {
-    const now = new Date();
-    let greeting = "Buenas Noches";
+    let activeWidgetIndex = 0;
+    let widgetInterval;
+    const rotationDuration = 5000; 
+    const allWidgets = document.querySelectorAll('#widget-group-container .draggable-widget');
 
-    if (now.getHours() >= 5 && now.getHours() < 12) greeting = "Buenos Días";
-    else if (now.getHours() >= 12 && now.getHours() < 20) greeting = "Buenas Tardes";
+    function getActiveWidgets() {
+        return Array.from(allWidgets).filter(widget => {
+            const id = widget.id.replace('widget-', 'toggle-');
+            const toggle = document.getElementById(id);
+            // El widget de reloj no tiene toggle en el HTML original, pero ahora sí, por lo que este chequeo es más robusto.
+            return toggle ? toggle.checked : true;
+        });
+    }
 
-    // Cambiar el placeholder del input
-    const search = document.getElementById("search-input");
-    search.placeholder = `${greeting}, ¿qué necesitas hoy?`;
-  }
+    function showNextWidget() {
+        const activeWidgets = getActiveWidgets();
+        
+        if (activeWidgets.length === 0) {
+            allWidgets.forEach(w => w.classList.remove('widget-active'));
+            return;
+        }
+
+        if (activeWidgetIndex >= activeWidgets.length) {
+            activeWidgetIndex = 0;
+        }
+
+        allWidgets.forEach(w => w.classList.remove('widget-active'));
+
+        const nextWidget = activeWidgets[activeWidgetIndex];
+        nextWidget.classList.add('widget-active');
+
+        activeWidgetIndex = (activeWidgetIndex + 1) % activeWidgets.length;
+    }
+
+    function startWidgetRotation() {
+        if (widgetInterval) {
+            clearInterval(widgetInterval);
+        }
+        
+        showNextWidget();
+        widgetInterval = setInterval(showNextWidget, rotationDuration);
+    }
+    
+    // === ARRASTRE Y ESCALADO ===
+
+    const WIDGET_GROUP_ID = 'widget-group-container';
+    const STORAGE_KEY = `widget-${WIDGET_GROUP_ID}-tr-position`; 
+
+    let currentX = 0; 
+    let currentY = 0; 
+    let currentScale = 1; 
+    
+    function applyWidgetTransforms() {
+        const widgetGroup = document.getElementById(WIDGET_GROUP_ID);
+        if (!widgetGroup) return;
+
+        widgetGroup.style.transform = `scale(${currentScale}) translate(${currentX}px, ${currentY}px)`;
+    }
+
+    function scaleWidgets() {
+        currentScale = Math.min(window.innerWidth / 1920, 1.2);
+        applyWidgetTransforms(); 
+    }
+
+    function makeDraggable(element) {
+        let isDragging = false;
+        let startX, startY;
+        
+        const savedPos = localStorage.getItem(STORAGE_KEY);
+        if (savedPos) {
+            try {
+                const pos = JSON.parse(savedPos);
+                currentX = pos.x; 
+                currentY = pos.y; 
+            } catch(e) {
+                console.error("Error al cargar la posición guardada:", e);
+            }
+        }
+        
+        element.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX; 
+            startY = e.clientY;
+            
+            element.style.cursor = 'grabbing';
+            element.style.transition = 'none'; 
+            element.style.zIndex = 100;
+            e.preventDefault(); 
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            const deltaX = e.clientX - startX;
+            const deltaY = e.clientY - startY;
+            
+            currentX += deltaX;
+            currentY += deltaY;
+            
+            startX = e.clientX;
+            startY = e.clientY;
+
+            applyWidgetTransforms();
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                element.style.cursor = 'grab';
+                element.style.transition = 'opacity .3s, visibility .3s, transform .3s'; 
+                element.style.zIndex = 50; 
+                
+                const pos = { x: currentX, y: currentY };
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(pos));
+            }
+        });
+        
+        scaleWidgets();
+    }
+
+
+    // === LÓGICA DE RELOJ, CALENDARIO, CLIMA Y CONFIGURACIÓN ===
+    
+    const segmentMap = {
+      '0': ['a', 'b', 'c', 'd', 'e', 'f'], '1': ['b', 'c'], '2': ['a', 'b', 'd', 'e', 'g'],
+      '3': ['a', 'b', 'c', 'd', 'g'], '4': ['b', 'c', 'f', 'g'], '5': ['a', 'c', 'd', 'f', 'g'],
+      '6': ['a', 'c', 'd', 'e', 'f', 'g'], '7': ['a', 'b', 'c'], '8': ['a', 'b', 'c', 'd', 'e', 'f', 'g'],
+      '9': ['a', 'b', 'c', 'd', 'f', 'g']
+    };
+
+    function updateDigit(digitId, value) {
+      const digit = document.getElementById(digitId);
+      const segments = digit.querySelectorAll('.segment');
+      const activeSegs = segmentMap[value] || [];
+      segments.forEach(seg => {
+        const segName = seg.className.split(' ').find(c => c.startsWith('seg-')).replace('seg-', '');
+        if (activeSegs.includes(segName)) {
+          seg.classList.add('on');
+        } else {
+          seg.classList.remove('on');
+        }
+      });
+    }
+
+    function updateClock() {
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      updateDigit('h1', hours[0]); updateDigit('h2', hours[1]);
+      updateDigit('m1', minutes[0]); updateDigit('m2', minutes[1]);
+    }
+
+    // LÓGICA DEL CALENDARIO MEJORADO
+    function updateCalendar() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = now.getMonth(); 
+        const today = now.getDate();
+
+        const daysNames = ['DOMINGO', 'LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO'];
+        const monthsNames = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+        
+        document.getElementById('cal-day-name').textContent = daysNames[now.getDay()];
+        document.getElementById('cal-month-year').textContent = `${monthsNames[month]} ${year}`;
+
+        const grid = document.getElementById('cal-grid');
+        grid.innerHTML = ''; 
+
+        // 1. Obtener el día de la semana del primer día del mes (0 = Domingo)
+        const firstDayOfMonth = new Date(year, month, 1).getDay();
+        // 2. Obtener el último día del mes
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // Rellenar celdas vacías (offset)
+        for (let i = 0; i < firstDayOfMonth; i++) {
+            const emptyDay = document.createElement('span');
+            emptyDay.classList.add('cal-day', 'empty');
+            grid.appendChild(emptyDay);
+        }
+
+        // Rellenar días del mes
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayElement = document.createElement('span');
+            dayElement.classList.add('cal-day');
+            dayElement.textContent = day;
+
+            if (day === today) {
+                dayElement.classList.add('cal-day-active');
+            }
+
+            grid.appendChild(dayElement);
+        }
+    }
+
+    // --- LÓGICA DE CLIMA BASADO EN UBICACIÓN ---
+
+    // Mapeo de condiciones climáticas a iconos de Font Awesome
+    const weatherIconMap = {
+        'Clear': 'fa-sun',
+        'Clouds': 'fa-cloud',
+        'Rain': 'fa-cloud-showers-heavy',
+        'Drizzle': 'fa-cloud-sun-rain',
+        'Thunderstorm': 'fa-cloud-bolt',
+        'Snow': 'fa-snowflake',
+        'Mist': 'fa-smog',
+        'Smoke': 'fa-smog',
+        'Haze': 'fa-smog',
+        'Dust': 'fa-smog',
+        'Fog': 'fa-smog',
+        'Sand': 'fa-smog',
+        'Ash': 'fa-smog',
+        'Squall': 'fa-wind',
+        'Tornado': 'fa-tornado',
+        'Default': 'fa-cloud'
+    };
+
+    function displayWeather(data) {
+        if (data.error) {
+            document.getElementById('weather-location').textContent = "Error al cargar el clima";
+            document.getElementById('weather-temp').textContent = "--°";
+            document.getElementById('weather-description').textContent = data.error;
+            document.getElementById('weather-icon').className = `fa-solid ${weatherIconMap['Default']} weather-icon`;
+            document.getElementById('weather-wind').textContent = '-- km/h';
+            document.getElementById('weather-humidity').textContent = '--%';
+            document.getElementById('weather-high').textContent = '--°';
+            return;
+        }
+
+        const iconKey = data.main.split(' ')[0]; // Usa la primera palabra de la descripción principal para el mapeo
+        const iconClass = weatherIconMap[iconKey] || weatherIconMap['Default'];
+
+        document.getElementById('weather-location').textContent = data.city;
+        document.getElementById('weather-temp').textContent = `${Math.round(data.temp)}°`;
+        // Capitaliza la descripción
+        const description = data.description.charAt(0).toUpperCase() + data.description.slice(1);
+        document.getElementById('weather-description').textContent = description;
+        document.getElementById('weather-icon').className = `fa-solid ${iconClass} weather-icon`;
+        document.getElementById('weather-wind').textContent = `${data.windSpeed} km/h`;
+        document.getElementById('weather-humidity').textContent = `${data.humidity}%`;
+        document.getElementById('weather-high').textContent = `${Math.round(data.tempMax)}°`; 
+    }
+
+    /**
+     * SIMULACIÓN DE FETCH DE DATOS DE CLIMA
+     * NOTA: Para un clima real, debes reemplazar esta función.
+     * 1. Obtén una clave API (ej: OpenWeatherMap).
+     * 2. Reemplaza este código con una llamada a 'fetch()' a la API externa.
+     */
+    async function fetchWeatherData(lat, lon) {
+        // En una aplicación real, aquí usarías fetch() a una API externa
+        // Ejemplo de URL (OpenWeatherMap): 
+        // const API_KEY = 'TU_CLAVE_AQUI';
+        // const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=es`;
+
+        // SIMULACIÓN DE DATOS (Puedes cambiar estos valores para simular otro clima)
+        const isRainy = Math.random() < 0.2;
+        const mainCondition = isRainy ? 'Rain' : (Math.random() < 0.6 ? 'Clouds' : 'Clear');
+        const temp = Math.floor(Math.random() * (25 - 10 + 1) + 10);
+        
+        // Simula la espera de la API
+        await new Promise(resolve => setTimeout(resolve, 500)); 
+
+        return {
+            city: "Ubicación Actual",
+            temp: temp,
+            tempMax: temp + 3,
+            main: mainCondition,
+            description: mainCondition === 'Rain' ? 'lluvia ligera' : (mainCondition === 'Clouds' ? 'parcialmente nublado' : 'cielo despejado'),
+            windSpeed: Math.floor(Math.random() * (15 - 5 + 1) + 5),
+            humidity: Math.floor(Math.random() * (90 - 40 + 1) + 40),
+        };
+    }
+
+    // GEOLOCALIZACIÓN Y CARGA DE CLIMA
+    function getWeatherByLocation() {
+        const weatherLocationEl = document.getElementById('weather-location');
+        weatherLocationEl.textContent = "Obteniendo ubicación...";
+        
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+                    
+                    weatherLocationEl.textContent = "Cargando clima...";
+
+                    try {
+                        const weatherData = await fetchWeatherData(lat, lon);
+                        // En una API real, tendrías que hacer una llamada inversa (reverse geocoding) 
+                        // para obtener el nombre real de la ciudad, pero aquí usamos un placeholder.
+                        displayWeather(weatherData);
+                    } catch (error) {
+                        console.error("Error fetching weather:", error);
+                        displayWeather({ error: "No se pudo obtener el clima." });
+                    }
+                },
+                (error) => {
+                    // Manejar errores de geolocalización
+                    let errorMessage = "Geolocalización denegada. Usando data de ejemplo.";
+                    if (error.code === error.PERMISSION_DENIED) {
+                        errorMessage = "Acceso a la ubicación denegado. Usando data de ejemplo.";
+                    } else if (error.code === error.POSITION_UNAVAILABLE) {
+                        errorMessage = "Información de ubicación no disponible. Usando data de ejemplo.";
+                    }
+                    console.error("Geolocation error:", error);
+                    // Mostrar datos simulados por defecto si falla la geolocalización
+                    displayWeather({
+                        city: "Santiago, Chile (Ejemplo)",
+                        temp: 18,
+                        tempMax: 22,
+                        main: 'Clouds',
+                        description: 'parcialmente nublado',
+                        windSpeed: 8,
+                        humidity: 60,
+                    });
+                },
+                { enableHighAccuracy: false, timeout: 5000, maximumAge: 0 }
+            );
+        } else {
+            // El navegador no soporta Geolocation
+            displayWeather({ error: "Geolocalización no soportada. Usando data de ejemplo." });
+        }
+    }
+    // FIN LÓGICA DE CLIMA
+
+    // LÓGICA DE SALUDO 
+    function getGreeting() {
+      const hour = new Date().getHours();
+      let greeting;
+
+      // De 5:00 a 11:59: Buenos días
+      if (hour >= 5 && hour < 12) {
+          greeting = "Buenos días";
+      // De 12:00 a 19:59: Buenas tardes
+      } else if (hour >= 12 && hour < 20) {
+          greeting = "Buenas tardes";
+      // De 20:00 a 4:59: Buenas noches
+      } else {
+          greeting = "Buenas noches";
+      }
+      return greeting;
+    }
+
+    function updateSearchPlaceholder() {
+      const greeting = getGreeting();
+      const searchInput = document.getElementById('search-input');
+      if (searchInput) {
+          searchInput.placeholder = `${greeting}, ¿qué necesitas hoy?`;
+      }
+    }
+    // FIN LÓGICA DE SALUDO
+
+    // MODAL DE CONFIGURACIÓN
+    const settingsBtn = document.getElementById('settings-btn');
+    const settingsModal = document.getElementById('settings-modal');
+    const closeSettings = document.getElementById('close-settings');
+
+    settingsBtn.addEventListener('click', () => { settingsModal.classList.add('active'); });
+    closeSettings.addEventListener('click', () => { settingsModal.classList.remove('active'); });
+    settingsModal.addEventListener('click', (e) => {
+      if (e.target === settingsModal) { settingsModal.classList.remove('active'); }
+    });
+
+    // Restaurar estado de los toggles y manejar eventos
+    function restoreToggleStates() {
+        const toggles = ['toggle-clock', 'toggle-weather', 'toggle-calendar'];
+        toggles.forEach(id => {
+            const toggle = document.getElementById(id);
+            const storageKey = id.replace('toggle', 'widget') + '-visible';
+            const storedValue = localStorage.getItem(storageKey);
+            
+            if (storedValue === 'false') {
+                toggle.checked = false;
+            } else {
+                toggle.checked = true;
+                localStorage.setItem(storageKey, true);
+            }
+
+            toggle.addEventListener('change', (e) => {
+                localStorage.setItem(storageKey, e.target.checked);
+                activeWidgetIndex = 0;
+                startWidgetRotation(); 
+            });
+        });
+    }
+
+    // Función para el Splash Screen - MODIFICADA PARA APARECER ANTES
+    function handleSplashScreen() {
+        const splashScreen = document.getElementById('splash-screen');
+        if (!splashScreen) return; 
+
+        const fadeDuration = 500; // Duración del fade out (0.5s)
+        const revealContentAt = 2000; // El fondo comienza a desvanecerse a los 2.0 segundos
+
+        // Inicia el desvanecimiento de la pantalla de bienvenida (background)
+        setTimeout(() => {
+            splashScreen.style.opacity = '0';
+            // Luego, espera el fade out (0.5s) y lo elimina del DOM.
+            setTimeout(() => {
+                splashScreen.style.visibility = 'hidden';
+                splashScreen.remove(); 
+            }, fadeDuration); 
+        }, revealContentAt); 
+    }
+
+
+    // === INICIALIZACIÓN PRINCIPAL ===
+    updateClock();
+    updateCalendar();
+    updateSearchPlaceholder(); 
+    
+    // Nueva llamada para cargar el clima al inicio
+    getWeatherByLocation(); 
+    
+    setInterval(updateClock, 1000);
+    setInterval(updateCalendar, 60000);
+    
+    restoreToggleStates();
+    
+    // Iniciar arrastre (que también aplica la escala inicial)
+    makeDraggable(document.getElementById(WIDGET_GROUP_ID));
+    
+    // Iniciar la rotación secuencial
+    startWidgetRotation(); 
+    
+    // Escalar al redimensionar la ventana
+    window.addEventListener('resize', scaleWidgets);
+
+    // Llamar a la función del Splash Screen
+    handleSplashScreen();
   </script>
+
 </body>
 </html>

@@ -5,7 +5,7 @@
   <title>Zeia Lab Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Laboratorio de ingeniería - Dashboard personalizado" />
-  <meta name="author" content="Zeia Lab" />
+  <meta name="By-Giovie" content="Zeia Lab" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -986,136 +986,116 @@
             grid.appendChild(dayElement);
         }
     }
+    
+    /* ===== MAPEO OPEN-METEO ===== */
+    const CACHE_KEY = "weather_cache";
+    const CACHE_TIME = 30 * 60 * 1000;
 
-    // --- LÓGICA DE CLIMA BASADO EN UBICACIÓN ---
-
-    // Mapeo de condiciones climáticas a iconos de Font Awesome
-    const weatherIconMap = {
-        'Clear': 'fa-sun',
-        'Clouds': 'fa-cloud',
-        'Rain': 'fa-cloud-showers-heavy',
-        'Drizzle': 'fa-cloud-sun-rain',
-        'Thunderstorm': 'fa-cloud-bolt',
-        'Snow': 'fa-snowflake',
-        'Mist': 'fa-smog',
-        'Smoke': 'fa-smog',
-        'Haze': 'fa-smog',
-        'Dust': 'fa-smog',
-        'Fog': 'fa-smog',
-        'Sand': 'fa-smog',
-        'Ash': 'fa-smog',
-        'Squall': 'fa-wind',
-        'Tornado': 'fa-tornado',
-        'Default': 'fa-cloud'
-    };
-
-    function displayWeather(data) {
-        if (data.error) {
-            document.getElementById('weather-location').textContent = "Error al cargar el clima";
-            document.getElementById('weather-temp').textContent = "--°";
-            document.getElementById('weather-description').textContent = data.error;
-            document.getElementById('weather-icon').className = `fa-solid ${weatherIconMap['Default']} weather-icon`;
-            document.getElementById('weather-wind').textContent = '-- km/h';
-            document.getElementById('weather-humidity').textContent = '--%';
-            document.getElementById('weather-high').textContent = '--°';
-            return;
-        }
-
-        const iconKey = data.main.split(' ')[0]; // Usa la primera palabra de la descripción principal para el mapeo
-        const iconClass = weatherIconMap[iconKey] || weatherIconMap['Default'];
-
-        document.getElementById('weather-location').textContent = data.city;
-        document.getElementById('weather-temp').textContent = `${Math.round(data.temp)}°`;
-        // Capitaliza la descripción
-        const description = data.description.charAt(0).toUpperCase() + data.description.slice(1);
-        document.getElementById('weather-description').textContent = description;
-        document.getElementById('weather-icon').className = `fa-solid ${iconClass} weather-icon`;
-        document.getElementById('weather-wind').textContent = `${data.windSpeed} km/h`;
-        document.getElementById('weather-humidity').textContent = `${data.humidity}%`;
-        document.getElementById('weather-high').textContent = `${Math.round(data.tempMax)}°`; 
+    /* ===== UTILIDADES ===== */
+    function weatherCodeInfo(code) {
+      if (code === 0) return { text: "Despejado", icon: "fa-sun", cls: "weather-clear" };
+      if (code <= 3) return { text: "Parcialmente nublado", icon: "fa-cloud-sun", cls: "weather-cloudy" };
+      if (code <= 48) return { text: "Niebla", icon: "fa-smog", cls: "weather-fog" };
+      if (code <= 67) return { text: "Lluvia", icon: "fa-cloud-rain", cls: "weather-rain" };
+      if (code <= 77) return { text: "Nieve", icon: "fa-snowflake", cls: "weather-snow" };
+      if (code <= 99) return { text: "Tormenta", icon: "fa-cloud-bolt", cls: "weather-storm" };
+      return { text: "Clima desconocido", icon: "fa-cloud", cls: "" };
     }
 
-    /**
-     * SIMULACIÓN DE FETCH DE DATOS DE CLIMA
-     * NOTA: Para un clima real, debes reemplazar esta función.
-     * 1. Obtén una clave API (ej: OpenWeatherMap).
-     * 2. Reemplaza este código con una llamada a 'fetch()' a la API externa.
-     */
-    async function fetchWeatherData(lat, lon) {
-        // En una aplicación real, aquí usarías fetch() a una API externa
-        // Ejemplo de URL (OpenWeatherMap): 
-        // const API_KEY = 'TU_CLAVE_AQUI';
-        // const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric&lang=es`;
-
-        // SIMULACIÓN DE DATOS (Puedes cambiar estos valores para simular otro clima)
-        const isRainy = Math.random() < 0.2;
-        const mainCondition = isRainy ? 'Rain' : (Math.random() < 0.6 ? 'Clouds' : 'Clear');
-        const temp = Math.floor(Math.random() * (25 - 10 + 1) + 10);
-        
-        // Simula la espera de la API
-        await new Promise(resolve => setTimeout(resolve, 500)); 
-
-        return {
-            city: "Ubicación Actual",
-            temp: temp,
-            tempMax: temp + 3,
-            main: mainCondition,
-            description: mainCondition === 'Rain' ? 'lluvia ligera' : (mainCondition === 'Clouds' ? 'parcialmente nublado' : 'cielo despejado'),
-            windSpeed: Math.floor(Math.random() * (15 - 5 + 1) + 5),
-            humidity: Math.floor(Math.random() * (90 - 40 + 1) + 40),
-        };
+    function applyWeatherUI(info) {
+      const w = document.getElementById("widget-weather");
+      w.className = `widget-pane active ${info.cls}`;
     }
 
-    // GEOLOCALIZACIÓN Y CARGA DE CLIMA
-    function getWeatherByLocation() {
-        const weatherLocationEl = document.getElementById('weather-location');
-        weatherLocationEl.textContent = "Obteniendo ubicación...";
-        
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                async (position) => {
-                    const lat = position.coords.latitude;
-                    const lon = position.coords.longitude;
-                    
-                    weatherLocationEl.textContent = "Cargando clima...";
+    /* ===== CACHE ===== */
+    function saveCache(data) {
+      localStorage.setItem(CACHE_KEY, JSON.stringify({
+        time: Date.now(),
+        data
+      }));
+    }
 
-                    try {
-                        const weatherData = await fetchWeatherData(lat, lon);
-                        // En una API real, tendrías que hacer una llamada inversa (reverse geocoding) 
-                        // para obtener el nombre real de la ciudad, pero aquí usamos un placeholder.
-                        displayWeather(weatherData);
-                    } catch (error) {
-                        console.error("Error fetching weather:", error);
-                        displayWeather({ error: "No se pudo obtener el clima." });
-                    }
-                },
-                (error) => {
-                    // Manejar errores de geolocalización
-                    let errorMessage = "Geolocalización denegada. Usando data de ejemplo.";
-                    if (error.code === error.PERMISSION_DENIED) {
-                        errorMessage = "Acceso a la ubicación denegado. Usando data de ejemplo.";
-                    } else if (error.code === error.POSITION_UNAVAILABLE) {
-                        errorMessage = "Información de ubicación no disponible. Usando data de ejemplo.";
-                    }
-                    console.error("Geolocation error:", error);
-                    // Mostrar datos simulados por defecto si falla la geolocalización
-                    displayWeather({
-                        city: "Santiago, Chile (Ejemplo)",
-                        temp: 18,
-                        tempMax: 22,
-                        main: 'Clouds',
-                        description: 'parcialmente nublado',
-                        windSpeed: 8,
-                        humidity: 60,
-                    });
-                },
-                { enableHighAccuracy: false, timeout: 5000, maximumAge: 0 }
-            );
+    function loadCache() {
+      const raw = localStorage.getItem(CACHE_KEY);
+      if (!raw) return null;
+      const cache = JSON.parse(raw);
+      if (Date.now() - cache.time > CACHE_TIME) return null;
+      return cache.data;
+    }
+
+    /* ===== CIUDAD REAL ===== */
+    async function getCityName(lat, lon) {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+      );
+      const data = await res.json();
+      return `${data.address.city || data.address.town || data.address.village}, ${data.address.country}`;
+    }
+
+    /* ===== CLIMA PRINCIPAL ===== */
+    async function loadWeather(lat, lon) {
+      const url =
+        `https://api.open-meteo.com/v1/forecast` +
+        `?latitude=${lat}&longitude=${lon}` +
+        `&current=temperature_2m,weathercode,wind_speed_10m,relative_humidity_2m` +
+        `&daily=temperature_2m_max&timezone=auto`;
+
+      const res = await fetch(url);
+      const d = await res.json();
+
+      const info = weatherCodeInfo(d.current.weathercode);
+
+      document.getElementById("weather-temp").textContent =
+        Math.round(d.current.temperature_2m) + "°";
+      document.getElementById("weather-description").textContent = info.text;
+      document.getElementById("weather-wind").textContent =
+        Math.round(d.current.wind_speed_10m) + " km/h";
+      document.getElementById("weather-humidity").textContent =
+        Math.round(d.current.relative_humidity_2m) + "%";
+      document.getElementById("weather-high").textContent =
+        Math.round(d.daily.temperature_2m_max[0]) + "°";
+
+      const icon = document.getElementById("weather-icon");
+      icon.className = `fa-solid ${info.icon} weather-icon`;
+
+      applyWeatherUI(info);
+
+      saveCache({ lat, lon, weather: d });
+    }
+
+    /* ===== INIT ===== */
+    function initWeather() {
+      const cached = loadCache();
+
+      if (!navigator.geolocation) {
+        if (cached) loadWeather(cached.lat, cached.lon);
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(async pos => {
+        const lat = pos.coords.latitude;
+        const lon = pos.coords.longitude;
+
+        const city = await getCityName(lat, lon);
+        document.getElementById("weather-location").textContent = city;
+
+        loadWeather(lat, lon);
+      }, () => {
+        if (cached) {
+          document.getElementById("weather-location").textContent =
+            "Última ubicación guardada";
+          loadWeather(cached.lat, cached.lon);
         } else {
-            // El navegador no soporta Geolocation
-            displayWeather({ error: "Geolocalización no soportada. Usando data de ejemplo." });
+          document.getElementById("weather-location").textContent =
+            "Permite ubicación para clima local";
         }
+      });
     }
+    function getWeatherByLocation() {
+      initWeather();
+    }
+
+
     // FIN LÓGICA DE CLIMA
 
     // LÓGICA DE SALUDO 
@@ -1210,8 +1190,7 @@
     setInterval(updateClock, 1000);
     setInterval(updateCalendar, 60000);
     
-    // restoreToggleStates(); // Ya no es necesario con el sistema de pestañas
-    
+
     // Iniciar arrastre (que también aplica la escala inicial)
     makeDraggable(document.getElementById(WIDGET_GROUP_ID));
     

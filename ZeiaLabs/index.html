@@ -299,6 +299,7 @@
     /* Barra de Pestañas */
     .widget-tabs {
       display: flex;
+      justify-content: center;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       margin-bottom: 1rem;
     }
@@ -343,7 +344,7 @@
     }
 
     .widget-pane.active {
-      display: flex; /* Visible cuando está activo */
+      display: flex !important; /* Visible cuando está activo */
     }
 
     /* Tirador de Redimensionamiento */
@@ -469,9 +470,10 @@
       font-size:1.3rem; 
       font-weight:bold;
       text-transform:uppercase;
+      border-radius:8px;
       padding: .8rem 1rem; 
       letter-spacing:.2rem; 
-      box-shadow:0 0 15px var(--secondary-text)
+      box-shadow:0 0 15px var(--glow-color)
     }
     .cal-body{
       padding: 1rem 1rem 1.5rem; /* Ajuste de padding */
@@ -522,53 +524,19 @@
       font-weight: 600 !important;
       box-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
     }
-    /* BOTÓN DE CONFIGURACIÓN */
-    #settings-btn{
-      position:fixed;
-      bottom:2.5rem;
-      right:2.5rem;
-      font-size: 1.5rem;
-      color:rgba(255,255,255,.5);
-      cursor:grab;
-      z-index:100;
-      transition:color .3s;
-      background:rgba(0,0,0,.5);
-      padding:.5rem;
-      border-radius:50%;
-      backdrop-filter:blur(5px);
-      box-shadow:0 0 10px rgba(0,0,0,.5);
-      transform: none; 
+
+    .cal-nav-btn {
+      background: none;
+      border: none;
+      color: var(--primary-text);
+      cursor: pointer;
+      padding: 5px 10px;
+      transition: 0.2s;
     }
-
-    #settings-btn:hover{
-        color:var(--accent-color); 
-        box-shadow:0 0 10px var(--glow-color);
+    .cal-nav-btn:hover {
+      color: var(--accent-color);
+      transform: scale(1.2);
     }
-
-    #settings-btn:active{
-        cursor:grabbing; 
-        transition: none;
-        transform: none !important; 
-        box-shadow:0 0 10px rgba(0,0,0,.5);
-    }
-
-    /* MODAL DE CONFIGURACIÓN */
-    .settings-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);backdrop-filter:blur(5px);display:flex;justify-content:center;align-items:center;z-index:1000;opacity:0;pointer-events:none;transition:.3s}
-    .settings-modal.active{opacity:1;pointer-events:auto}
-    .settings-content{background:var(--bg-color);width:90%;max-width:350px;padding:2rem;border-radius:15px;border:2px solid var(--panel-border);box-shadow:0 0 30px rgba(0,191,255,.2);color:#fff;transform:scale(.9);transition:.3s}
-    .settings-modal.active .settings-content{transform:scale(1)}
-    .settings-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;border-bottom:1px solid #333;padding-bottom:.8rem}
-    .settings-header h3{margin:0;font-size:1.3rem}
-    .close-modal{cursor:pointer;font-size:1.5rem;color:var(--secondary-text);transition:.2s}
-    .close-modal:hover{color:var(--accent-color)}
-    .setting-item{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem}
-    .switch{position:relative;display:inline-block;width:50px;height:26px}
-    .switch input{opacity:0;width:0;height:0}
-    .slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:#333;transition:.4s;border-radius:34px}
-    .slider:before{position:absolute;content:"";height:18px;width:18px;left:4px;bottom:4px;background:#fff;transition:.4s;border-radius:50%}
-    input:checked+.slider{background:var(--accent-color)}
-    input:checked+.slider:before{transform:translateX(24px)}
-
   </style>
 </head>
 
@@ -696,7 +664,11 @@
                 <div class="cal-header" id="cal-day-name">--</div>
 
                 <div class="cal-body">
+                <div class="cal-nav-container" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                <button class="cal-nav-btn" onclick="changeMonth(-1)"><i class="fas fa-chevron-left"></i></button>
                 <div class="cal-month-year" id="cal-month-year">--</div>
+                <button class="cal-nav-btn" onclick="changeMonth(1)"><i class="fas fa-chevron-right"></i></button>
+              </div>
 
                 <div class="cal-weekdays">
                     <span>D</span><span>L</span><span>M</span>
@@ -705,6 +677,8 @@
 
                 <div class="cal-grid" id="cal-grid"></div>
                 </div>
+
+                
 
             </div>
             </div>
@@ -715,8 +689,8 @@
         </div>
 
 
-      <div id="settings-btn" title="Config"><i class="fa-solid fa-gear"></i></div>
 
+      <!-- Barra de Búsqueda -->
       <section class="search-container">
         <input
         id="search-input"
@@ -727,12 +701,7 @@
 
     </main>
 
-    <div class="settings-modal" id="settings-modal">
-      <div class="settings-content">
-        <div class="settings-header"><h3>Widgets</h3><i class="fa-solid fa-xmark close-modal" id="close-settings"></i></div>
-        <div class="setting-item"><span>Reloj Digital</span><label class="switch"><input type="checkbox" id="toggle-clock" checked><span class="slider"></span></label></div>
-        <div class="setting-item"><span>Clima</span><label class="switch"><input type="checkbox" id="toggle-weather" checked><span class="slider"></span></label></div>
-        <div class="setting-item"><span>Calendario</span><label class="switch"><input type="checkbox" id="toggle-calendar" checked><span class="slider"></span></label></div>
+
       </div>
     </div>
   </div>
@@ -948,8 +917,8 @@
     // LÓGICA DEL CALENDARIO MEJORADO
     function updateCalendar() {
         const now = new Date();
-        const year = now.getFullYear();
-        const month = now.getMonth(); 
+        const year = currentViewDate.getFullYear();
+        const month = currentViewDate.getMonth(); 
         const today = now.getDate();
 
         const daysNames = ['DOMINGO', 'LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO'];
@@ -986,6 +955,13 @@
             grid.appendChild(dayElement);
         }
     }
+
+    let currentViewDate = new Date(); // Añadir esta línea
+
+        function changeMonth(offset) {
+          currentViewDate.setMonth(currentViewDate.getMonth() + offset);
+          updateCalendar();
+        }
     
     /* ===== MAPEO OPEN-METEO ===== */
     const CACHE_KEY = "weather_cache";
@@ -1004,7 +980,7 @@
 
     function applyWeatherUI(info) {
       const w = document.getElementById("widget-weather");
-      w.className = `widget-pane active ${info.cls}`;
+      w.className = `widget-pane ${info.cls}`;
     }
 
     /* ===== CACHE ===== */
@@ -1125,17 +1101,6 @@
     }
     // FIN LÓGICA DE SALUDO
 
-    // MODAL DE CONFIGURACIÓN
-    const settingsBtn = document.getElementById('settings-btn');
-    const settingsModal = document.getElementById('settings-modal');
-    const closeSettings = document.getElementById('close-settings');
-
-    settingsBtn.addEventListener('click', () => { settingsModal.classList.add('active'); });
-    closeSettings.addEventListener('click', () => { settingsModal.classList.remove('active'); });
-    settingsModal.addEventListener('click', (e) => {
-      if (e.target === settingsModal) { settingsModal.classList.remove('active'); }
-    });
-
     // Restaurar estado de los toggles y manejar eventos
     function restoreToggleStates() {
         const toggles = ['toggle-clock', 'toggle-weather', 'toggle-calendar'];
@@ -1207,15 +1172,19 @@
   const splash = document.getElementById('splash-screen');
   const searchInput = document.getElementById('search-input');
 
+  // FOCO RÁPIDO: Se activa a los 500ms, no espera los 3.5 segundos.
   setTimeout(() => {
-    splash.style.opacity = '0';
-    splash.style.visibility = 'hidden';
+    if (searchInput) searchInput.focus();
+  }, 500); 
 
-    // Forzar foco real
-    setTimeout(() => {
-      searchInput.focus();
-    }, 100);
-  }, 3500); // mismo tiempo que tu animación
+  // ELIMINACIÓN DEL SPLASH: Mantiene el tiempo de tu animación original.
+  setTimeout(() => {
+    if (splash) {
+      splash.style.opacity = '0';
+      splash.style.visibility = 'hidden';
+      setTimeout(() => splash.remove(), 500);
+    }
+  }, 3500); 
 });
 
   </script>
